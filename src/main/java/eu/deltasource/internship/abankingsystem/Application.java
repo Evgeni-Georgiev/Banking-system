@@ -3,6 +3,7 @@ package eu.deltasource.internship.abankingsystem;
 import eu.deltasource.internship.abankingsystem.service.BankInterface;
 import eu.deltasource.internship.abankingsystem.service.BankService;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,27 +27,27 @@ public class Application {
 //        ownersList.add(vix);
 //        ownersList.add(vix2);
 
-        Map<String, Double> exchangeRates = new HashMap<>();
-        exchangeRates.put("BGNEUR", 1.95);
-        exchangeRates.put("BGNUSD", 1.79);
-        exchangeRates.put("USDBGN", 0.55);
-        exchangeRates.put("USDEUR", 1.08);
-        exchangeRates.put("EURBGN", 0.51);
-        exchangeRates.put("EURUSD", 0.92);
-        exchangeRates.put("EUREUR", 1.0);
-        exchangeRates.put("BGNBGN", 1.0);
-        exchangeRates.put("USDUSD", 1.0);
+        Map<Currency, Double> exchangeRates = new HashMap<>();
+        exchangeRates.put(Currency.BGNEUR, 1.95);
+        exchangeRates.put(Currency.BGNUSD, 1.79);
+        exchangeRates.put(Currency.USDBGN, 0.55);
+        exchangeRates.put(Currency.USDEUR, 1.08);
+        exchangeRates.put(Currency.EURBGN, 0.51);
+        exchangeRates.put(Currency.EURUSD, 0.92);
+        exchangeRates.put(Currency.EUREUR, 1.0);
+        exchangeRates.put(Currency.BGNBGN, 1.0);
+        exchangeRates.put(Currency.USDUSD, 1.0);
 
         BankInstitution dsk = new BankInstitution("DSK", "asdwqe 12 34", new HashMap<>() {{
-            put("Tax to the same bank", 1.3);
-            put("Tax to different bank", 2.3);
+            put(Taxes.TAX_TO_THE_SAME_BANK, 1.3);
+            put(Taxes.TAX_TO_DIFFERENT_BANK, 2.3);
         }}, exchangeRates, transactionImpl);
 
 //        System.out.println(dsk.getCustomers());
 
         BankInstitution raiffeisen = new BankInstitution("Raiffeisen", "asdwqe 12 34", new HashMap<>() {{
-            put("Tax to the same bank", 3.3);
-            put("Tax to different bank", 5.3);
+            put(Taxes.TAX_TO_THE_SAME_BANK, 3.3);
+            put(Taxes.TAX_TO_DIFFERENT_BANK, 5.3);
         }}, exchangeRates, transactionImpl);
 
 
@@ -69,7 +70,7 @@ public class Application {
 //        transactionImpl.ownerAccountCheck(bankAccount7, simon);
 //        bankAccount7.ownerAccountCheck(simon);
 //        System.out.println(getAccounts());
-            ownerAccountCheck(simon);
+//            ownerAccountCheck(simon);
 //        System.out.println(bankAccount1.getAccounts());
 //        transactionImpl.ownerAccountCheck(raiffeisen);
 //        System.out.println(simon);
@@ -83,7 +84,17 @@ public class Application {
 
 //        System.out.println(bankAccount1);
 
-//        transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 20.0);
+        System.out.println(bankAccount1.getAmountAvailable());
+        System.out.println(bankAccount2.getAmountAvailable());
+        transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 20.0);
+        transactionImpl.deposit(bankAccount1, 29.0, "USD");
+        System.out.println(bankAccount1.getAmountAvailable());
+        System.out.println(bankAccount2.getAmountAvailable());
+//        transactionImpl.transactionHistory(bankAccount2);
+
+        System.out.println(bankAccount1);
+
+
 //        transactionImpl.transferBetweenAccounts(bankAccount2, bankAccount3, 20.0);
 //        System.out.println(bankAccount1.getAmountAvailable());
 //        System.out.println(bankAccount2.getAmountAvailable());

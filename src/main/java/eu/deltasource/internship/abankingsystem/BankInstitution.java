@@ -14,15 +14,15 @@ public class BankInstitution {
 
     private ArrayList<Owner> customers = new ArrayList<>();
 
-    private HashMap<String, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
+    private HashMap<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
 
-    private Map<String, Double> exchangeRates;
+    private Map<Currency, Double> exchangeRates;
 
 //    private LinkedList<Transaction> transferHistory;
 
     private int dayCountTime = 1;
 
-    public BankInstitution(String name, String address, HashMap<String, Double> priceList, Map<String, Double> exchangeRate, BankInterface transactionInterface) {
+    public BankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<Currency, Double> exchangeRate, BankInterface transactionInterface) {
         this.name = name;
         this.address = address;
 //        this.customers = customers;
@@ -44,11 +44,11 @@ public class BankInstitution {
         return customers;
     }
 
-    public HashMap<String, Double> getPriceList() {
+    public HashMap<Taxes, Double> getPriceList() {
         return priceList;
     }
 
-    public Map<String, Double> getExchangeRates() {
+    public Map<Currency, Double> getExchangeRates() {
         return exchangeRates;
     }
 
@@ -56,7 +56,7 @@ public class BankInstitution {
         return dayCountTime;
     }
 
-    public void setExchangeRates(Map<String, Double> exchangeRates) {
+    public void setExchangeRates(Map<Currency, Double> exchangeRates) {
         this.exchangeRates = exchangeRates;
     }
 
@@ -64,7 +64,7 @@ public class BankInstitution {
         this.dayCountTime = dayCountTime;
     }
 
-    public void setPriceList(HashMap<String, Double> priceList) {
+    public void setPriceList(HashMap<Taxes, Double> priceList) {
         this.priceList = priceList;
     }
 

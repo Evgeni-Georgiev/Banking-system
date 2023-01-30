@@ -1,13 +1,11 @@
 package eu.deltasource.internship.abankingsystem.service;
 
 import eu.deltasource.internship.abankingsystem.BankAccount;
-import eu.deltasource.internship.abankingsystem.BankInstitution;
-import eu.deltasource.internship.abankingsystem.Owner;
+import eu.deltasource.internship.abankingsystem.Currency;
+import eu.deltasource.internship.abankingsystem.Taxes;
 import eu.deltasource.internship.abankingsystem.Transaction;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class BankService implements BankInterface {
@@ -29,9 +27,6 @@ public class BankService implements BankInterface {
     private void makeTransaction(BankAccount fromAccount, BankAccount toAccount, double amount, String TransactionType) {
 
         var dayCount = fromAccount.getBankInstitution().getDayCountTime();
-
-//        LocalDate time = LocalDate.now();
-//        LocalDate tomorrowDate = time.plusDays(dayCount);
 
         Transaction transaction = new Transaction(fromAccount, toAccount, fromAccount.getBankInstitution(), toAccount.getBankInstitution(), amount, fromAccount.getCurrency(), toAccount.getCurrency(), processLocalDate(dayCount));
 
@@ -65,11 +60,15 @@ public class BankService implements BankInterface {
         bankAccount.getBankInstitution().setDayCountTime(dayCount);
     }
 
-    private void transactionAmountBetweenTwoAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount, String taxRate) {
+    private void transactionAmountBetweenTwoAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount, Taxes taxRate) {
 
         var source = fromAccount.getAmountAvailable();
         var target = toAccount.getAmountAvailable();
-        var exchangeRateMap = fromAccount.getBankInstitution().getExchangeRates().get(fromAccount.getCurrency() + toAccount.getCurrency());
+
+        var exchangeCurrency = fromAccount.getCurrency() + toAccount.getCurrency();
+        Currency currency = Currency.valueOf(exchangeCurrency);
+
+        var exchangeRateMap = fromAccount.getBankInstitution().getExchangeRates().get(currency);
         double res = depositAmount * exchangeRateMap;
 
         var amountAndTaxes = depositAmount + fromAccount.getBankInstitution().getPriceList().get(taxRate);
@@ -98,7 +97,11 @@ public class BankService implements BankInterface {
     public void deposit(BankAccount bankAccount, double depositAmount, String currency) {
 
         var amountAvailable = bankAccount.getAmountAvailable();
-        var exchangeRateMap = bankAccount.getBankInstitution().getExchangeRates().get(bankAccount.getCurrency() + currency);
+
+        var exchangeCurrency = bankAccount.getCurrency() + currency;
+        Currency currencyUpdate = Currency.valueOf(exchangeCurrency);
+
+        var exchangeRateMap = bankAccount.getBankInstitution().getExchangeRates().get(currencyUpdate);
         double res = depositAmount * exchangeRateMap;
 //        if (bankAccount.getAccountKey() == 'C' || bankAccount.getAccountKey() == 'S') {
             amountAvailable += res;
@@ -111,7 +114,7 @@ public class BankService implements BankInterface {
     public void withDraw(BankAccount bankAccount, double withdrawAmount) {
 
         var amountAvailable = bankAccount.getAmountAvailable();
-        var exchangeRateMap = bankAccount.getBankInstitution().getPriceList().get("Tax to the same bank");
+        var exchangeRateMap = bankAccount.getBankInstitution().getPriceList().get(Taxes.TAX_TO_THE_SAME_BANK);
         var finaTrans = withdrawAmount + exchangeRateMap;
 //        if (bankAccount.getAccountKey() == 'C' || bankAccount.getAccountKey() == 'S') {
             amountAvailable -= finaTrans;
@@ -130,13 +133,14 @@ public class BankService implements BankInterface {
             // FIXME: Extract the body of if statement in new method and reuse it.
             if (fromAccount.getBankInstitution() == toAccount.getBankInstitution()) {
                 System.out.println("Banks are the same!");
-                transactionAmountBetweenTwoAccounts(fromAccount, toAccount, depositAmount, "Tax to the same bank");
+                transactionAmountBetweenTwoAccounts(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_THE_SAME_BANK);
                 makeTransaction(fromAccount, toAccount, depositAmount, "Transfer");
             } else if (fromAccount.getBankInstitution() != toAccount.getBankInstitution()) {
                 System.out.println("Banks are different!");
-                transactionAmountBetweenTwoAccounts(fromAccount, toAccount, depositAmount, "Tax to different bank");
+                transactionAmountBetweenTwoAccounts(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_DIFFERENT_BANK);
                 makeTransaction(fromAccount, toAccount, depositAmount, "Transfer");
             }
+            System.out.println("Transaction success!");
         }
 //        makeTransaction(fromAccount, toAccount, depositAmount, "Transfer");
 

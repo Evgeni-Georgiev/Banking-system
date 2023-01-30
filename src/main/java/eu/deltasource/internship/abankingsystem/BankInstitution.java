@@ -68,53 +68,6 @@ public class BankInstitution {
         this.priceList = priceList;
     }
 
-//    public LinkedList<Transaction> getTransferHistory() {
-//        return transferHistory;
-//    }
-//
-//    public void setTransferHistory(LinkedList<Transaction> transferHistory) {
-//        this.transferHistory = transferHistory;
-//    }
-
-//    public String transactionHistory(BankAccount bankAccount) {
-//        return String.format("%nTransaction Statement for %s: %n " +
-//                "Source account: %s(%s) %n Target account: %s(%s) %n " +
-//                "Transferred amount: (%s)%,.2f %n Source currency: %s %n " +
-//                "Target currency: %s %n " +
-//                "Transaction type: %s %n " +
-//                "Timestamp: %s %n", getSourceIban(),
-//            bankAccount.getSourceAccount().getIban(),
-//            targetAccount.getBankInstitution().getName(),
-//            targetAccount.getIban(),
-//            getTargetBank().getName(),
-//            getSourceCurrency(),
-//            getAmount(),
-//            getSourceCurrency(),
-//            getTargetCurrency(),
-//            getTransactionType(),
-//            getTimestamp());
-//    }
-
-//    public void processDeposit(BankAccount bankAccount, double depositAmount, String currency) {
-//        transactionInterface.deposit(bankAccount, depositAmount, currency);
-//    }
-//
-//    public void processWithdraw(BankAccount bankAccount, double amount) {
-//        transactionInterface.withDraw(bankAccount, amount);
-//    }
-//
-//    public void processTransferBetweenAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount) {
-//        transactionInterface.transferBetweenAccounts(fromAccount, toAccount, depositAmount);
-//    }
-//
-//    public void processWithDrawHistory(BankAccount bankAccount) {
-//        transactionInterface.transactionHistory(bankAccount);
-//    }
-//
-//    public void checkOwnersOfAccountInBank() {
-//
-//    }
-
     @Override
     public String toString() {
         return String.format("%nBank Details: %n " +

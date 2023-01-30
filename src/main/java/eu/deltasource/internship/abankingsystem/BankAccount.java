@@ -126,17 +126,6 @@ public class BankAccount {
         this.transferStatement = transferStatement;
     }
 
-//    public LinkedList<Transaction> getTransferStatementLocal(String startDate, String endDate) {
-//        LinkedList<Transaction> statements = new LinkedList<>();
-//        for(Transaction transaction : transferStatement) {
-//            String datesFromTransaction = transaction.getTimestamp();
-//            if(datesFromTransaction.compareTo(startDate) >= 0 && datesFromTransaction.compareTo(endDate) <= 0) {
-//                statements.add(transaction);
-//            }
-//        }
-//        return statements;
-//    }
-
     public LinkedList<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate) {
         LinkedList<Transaction> statements = new LinkedList<>();
         for(Transaction transaction : transferStatement) {
@@ -157,14 +146,14 @@ public class BankAccount {
                 "Amount Available: %s %n " +
                 "Account Key: %s %n " +
                 "Account Type: %s %n " +
-                "Transactions for this account: %s %n",
+                "All Transactions for this account: %s %n",
                 getOwner().getName(),
             getIban(),
             getCurrency(),
             getAmountAvailable(),
             getAccountKey(),
             getTypeAccount(),
-            bankInstitution
+            transferStatement
         );
     }
 }

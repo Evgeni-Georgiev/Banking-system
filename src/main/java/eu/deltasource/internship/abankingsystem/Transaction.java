@@ -153,10 +153,10 @@ public class Transaction {
 
         if(Objects.equals(getTransactionType(), "Deposit") || Objects.equals(getTransactionType(), "Withdraw")) {
             return String.format(
-                "%n Source account: %s(%s) %n " +
-                    "Transferred amount: (%s)%,.2f %n Source currency: %s %n " +
-                    "Transaction type: %s %n " +
-                    "Timestamp: %s %n",
+                "%n  Source account: %s(%s) %n " +
+                    " Transferred amount: (%s)%,.2f %n  Source currency: %s %n " +
+                    " Transaction type: %s %n " +
+                    " Timestamp: %s %n",
                 sourceAccount.getIban(),
                 getTargetBank().getName(),
                 getSourceCurrency(),
@@ -166,11 +166,11 @@ public class Transaction {
                 getTimestamp());
         } else {
             return String.format(
-                "%n Source account: %s(%s) %n Target account: %s(%s) %n " +
-                    "Transferred amount: (%s)%,.2f %n Source currency: %s %n " +
-                    "Target currency: %s %n " +
-                    "Transaction type: %s %n " +
-                    "Timestamp: %s %n",
+                "%n  Source account: %s(%s) %n  Target account: %s(%s) %n " +
+                    " Transferred amount: (%s)%,.2f %n  Source currency: %s %n " +
+                    " Target currency: %s %n " +
+                    " Transaction type: %s %n " +
+                    " Timestamp: %s %n",
                 sourceAccount.getIban(),
                 sourceAccount.getBankInstitution().getName(),
                 targetAccount.getIban(),

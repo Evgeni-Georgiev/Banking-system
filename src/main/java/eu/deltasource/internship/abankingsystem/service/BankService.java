@@ -4,6 +4,9 @@ import eu.deltasource.internship.abankingsystem.BankAccount;
 import eu.deltasource.internship.abankingsystem.Currency;
 import eu.deltasource.internship.abankingsystem.Taxes;
 import eu.deltasource.internship.abankingsystem.Transaction;
+import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
+import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
+import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -47,20 +50,16 @@ public class BankService implements BankInterface {
 
         var dayCount = bankAccount.getBankInstitution().getDayCountTime();
 
-//        LocalDate time = LocalDate.now();
-//        LocalDate tomorrowDate = time.plusDays(dayCount);
-
         Transaction transaction = new Transaction(bankAccount, bankAccount.getBankInstitution(), depositAmount, bankAccount.getCurrency(), processLocalDate(dayCount));
 
         transaction.setTransactionType(TransactionType);
         bankAccount.getTransferStatement().add(transaction);
-//        bankAccount.setTransferStatement(bankAccount.getTransferStatement());
 
         dayCount++;
         bankAccount.getBankInstitution().setDayCountTime(dayCount);
     }
 
-    private void transactionAmountBetweenTwoAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount, Taxes taxRate) {
+    private void transactionAmountBetweenTwoAccounts(BankAccount fromAccount, BankAccount toAccount, Double depositAmount, Taxes taxRate) throws InsufficientAmountTransferException {
 
         var source = fromAccount.getAmountAvailable();
         var target = toAccount.getAmountAvailable();
@@ -78,13 +77,9 @@ public class BankService implements BankInterface {
             throw new IllegalArgumentException("IBANs are the same!");
         }
 
-//        if (!Objects.equals(fromAccount.getCurrency(), toAccount.getCurrency())) {
-//            source -= amountAndTaxes;
-//            target += res;
-//        } else {
-//            source -= amountAndTaxes;
-//            target += depositAmount;
-//        }
+        if(amountAndTaxes > source) {
+            throw new InsufficientAmountTransferException("Insufficient amount to transfer!");
+        }
 
         source -= amountAndTaxes;
         target += res;
@@ -103,46 +98,40 @@ public class BankService implements BankInterface {
 
         var exchangeRateMap = bankAccount.getBankInstitution().getExchangeRates().get(currencyUpdate);
         double res = depositAmount * exchangeRateMap;
-//        if (bankAccount.getAccountKey() == 'C' || bankAccount.getAccountKey() == 'S') {
-            amountAvailable += res;
-//        }
+        amountAvailable += res;
         bankAccount.setAmountAvailable(amountAvailable);
         makeTransactionForDepositOrWithdraw(bankAccount, depositAmount, "Deposit");
     }
 
     @Override
-    public void withDraw(BankAccount bankAccount, double withdrawAmount) {
+    public void withDraw(BankAccount bankAccount, Double withdrawAmount) throws InsufficientAmountWithdrawException {
 
         var amountAvailable = bankAccount.getAmountAvailable();
         var exchangeRateMap = bankAccount.getBankInstitution().getPriceList().get(Taxes.TAX_TO_THE_SAME_BANK);
-        var finaTrans = withdrawAmount + exchangeRateMap;
-//        if (bankAccount.getAccountKey() == 'C' || bankAccount.getAccountKey() == 'S') {
-            amountAvailable -= finaTrans;
-//        }
+        Double finaTrans = withdrawAmount + exchangeRateMap;
+        if(finaTrans.compareTo(amountAvailable) > 0) {
+            throw new InsufficientAmountWithdrawException("Insufficient amount to withdraw!");
+        }
+        amountAvailable -= finaTrans;
         bankAccount.setAmountAvailable(amountAvailable);
-        // Taxes are not inflicted
         makeTransactionForDepositOrWithdraw(bankAccount, withdrawAmount, "Withdraw");
     }
 
     @Override
-    public void transferBetweenAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount) {
+    public void transferBetweenAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount) throws TransferBetweenNotCurrentAccountsException, InsufficientAmountTransferException {
 
         if (fromAccount.getAccountKey() == 'C' && toAccount.getAccountKey() == 'C') {
-            // Case: Same bank institutions
-
-            // FIXME: Extract the body of if statement in new method and reuse it.
             if (fromAccount.getBankInstitution() == toAccount.getBankInstitution()) {
                 System.out.println("Banks are the same!");
                 transactionAmountBetweenTwoAccounts(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_THE_SAME_BANK);
-                makeTransaction(fromAccount, toAccount, depositAmount, "Transfer");
             } else if (fromAccount.getBankInstitution() != toAccount.getBankInstitution()) {
                 System.out.println("Banks are different!");
                 transactionAmountBetweenTwoAccounts(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_DIFFERENT_BANK);
-                makeTransaction(fromAccount, toAccount, depositAmount, "Transfer");
             }
-            System.out.println("Transaction success!");
+            makeTransaction(fromAccount, toAccount, depositAmount, "Transfer");
+        } else {
+            throw new TransferBetweenNotCurrentAccountsException("One of the two accounts is not current!");
         }
-//        makeTransaction(fromAccount, toAccount, depositAmount, "Transfer");
 
     }
 
@@ -150,6 +139,5 @@ public class BankService implements BankInterface {
     public void transactionHistory(BankAccount bankAccount) {
         System.out.println("\nTransaction Statement for " + bankAccount.getIban() + ": " + bankAccount.getTransferStatement());
     }
-
 
 }

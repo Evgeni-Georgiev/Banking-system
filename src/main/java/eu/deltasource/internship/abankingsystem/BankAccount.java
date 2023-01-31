@@ -15,7 +15,7 @@ public class BankAccount {
 
     private final String currency;
 
-    private double amountAvailable;
+    private Double amountAvailable;
 
     private final char accountKey;
 
@@ -28,10 +28,6 @@ public class BankAccount {
     private static final ArrayList<BankAccount> accounts = new ArrayList<>();
 
     private static final List<String> existingIbans = new ArrayList<>();
-
-    public static ArrayList<BankAccount> getAccounts() {
-        return accounts;
-    }
 
 //    public List<BankAccount> getOwnerList() {
 //        return ownerList;
@@ -48,14 +44,12 @@ public class BankAccount {
         this.amountAvailable = amountAvailable;
         this.accountKey = accountKey;
         this.transferStatement = new LinkedList<>();
-//        ownerList.add(this);
         accounts.add(this);
         existingIbans.add(iban);
         if(checkIfOwnerExists()) {
             // add customer to bank
             bankInstitution.getCustomers().add(owner);
         }
-//        ownerAccountCheck(owner);
     }
 
     public static void ownerAccountCheck(Owner owner) {
@@ -73,14 +67,6 @@ public class BankAccount {
         return !bankInstitution.getCustomers().contains(owner);
     }
 
-//    public void checkOwnerAccount() {
-//        for(var singleOwner : ownerList) {
-//            if(singleOwner.getOwner().getName() == ) {
-//
-//            }
-//        }
-//    }
-
     public Owner getOwner() {
         return owner;
     }
@@ -93,7 +79,7 @@ public class BankAccount {
         return currency;
     }
 
-    public double getAmountAvailable() {
+    public Double getAmountAvailable() {
         return amountAvailable;
     }
 
@@ -112,6 +98,10 @@ public class BankAccount {
 
     public char getAccountKey() {
         return accountKey;
+    }
+
+    public static ArrayList<BankAccount> getAccounts() {
+        return accounts;
     }
 
     public void setAmountAvailable(double amountAvailable) {

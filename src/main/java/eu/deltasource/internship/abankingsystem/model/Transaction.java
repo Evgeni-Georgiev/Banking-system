@@ -1,9 +1,13 @@
 package eu.deltasource.internship.abankingsystem.model;
 
+import eu.deltasource.internship.abankingsystem.BankAccountToBankMapping;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Transaction {
+
+    private BankAccountToBankMapping bankAccountToBankMapping;
 
     private final BankAccount sourceAccount;
 
@@ -99,9 +103,9 @@ public class Transaction {
                     " Transaction type: %s %n " +
                     " Timestamp: %s %n",
                 sourceAccount.getIban(),
-                sourceAccount.getBankInstitution().getName(),
+                bankAccountToBankMapping.getBank(sourceAccount).getName(),
                 targetAccount.getIban(),
-                targetAccount.getBankInstitution().getName(),
+                bankAccountToBankMapping.getBank(sourceAccount).getName(),
                 getSourceCurrency(),
                 getAmount(),
                 getSourceCurrency(),

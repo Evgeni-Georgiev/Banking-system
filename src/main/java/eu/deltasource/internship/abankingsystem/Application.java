@@ -54,12 +54,27 @@ public class Application {
         }}, exchangeRates);
 
 
-        BankAccount bankAccount1 = new BankAccount(dsk, simon, "toIBAN1", "EUR", 123.0, 'C');
-        BankAccount bankAccount2 = new BankAccount(raiffeisen, simon, "fromIBANOwner1", "EUR", 123.0, 'C');
-        BankAccount bankAccount5 = new BankAccount(raiffeisen, simon, "fromIBANOwner2", "EUR", 123.0, 'C');
-        BankAccount bankAccount6 = new BankAccount(raiffeisen, simon, "fromIBANOwner3", "EUR", 123.0, 'S');
-        BankAccount bankAccount7 = new BankAccount(dsk, simon, "fromIBANOwner4DSK", "EUR", 123.0, 'C');
-        BankAccount bankAccount3 = new BankAccount(dsk, kilian, "toIBAN3", "USD", 123.0, 'C');
+//        BankAccount bankAccount1 = new BankAccount(dsk, simon, "toIBAN1", "EUR", 123.0, 'C');
+//        BankAccount bankAccount2 = new BankAccount(raiffeisen, simon, "fromIBANOwner1", "EUR", 123.0, 'C');
+//        BankAccount bankAccount5 = new BankAccount(raiffeisen, simon, "fromIBANOwner2", "EUR", 123.0, 'C');
+//        BankAccount bankAccount6 = new BankAccount(raiffeisen, simon, "fromIBANOwner3", "EUR", 123.0, 'S');
+//        BankAccount bankAccount7 = new BankAccount(dsk, simon, "fromIBANOwner4DSK", "EUR", 123.0, 'C');
+//        BankAccount bankAccount3 = new BankAccount(dsk, kilian, "toIBAN3", "USD", 123.0, 'C');
+
+        BankAccount bankAccount1 = new BankAccount(simon, "toIBAN1", "EUR", 123.0, 'C');
+        BankAccount bankAccount2 = new BankAccount(simon, "fromIBANOwner1", "EUR", 123.0, 'C');
+        BankAccount bankAccount5 = new BankAccount(simon, "fromIBANOwner2", "EUR", 123.0, 'C');
+        BankAccount bankAccount6 = new BankAccount(simon, "fromIBANOwner3", "EUR", 123.0, 'S');
+        BankAccount bankAccount7 = new BankAccount(simon, "fromIBANOwner4DSK", "EUR", 123.0, 'C');
+        BankAccount bankAccount3 = new BankAccount(kilian, "toIBAN3", "USD", 123.0, 'C');
+
+        BankAccountToBankMapping mapping = new BankAccountToBankMapping();
+        mapping.addMapping(bankAccount1, dsk);
+        mapping.addMapping(bankAccount2, raiffeisen);
+        mapping.addMapping(bankAccount5, raiffeisen);
+        mapping.addMapping(bankAccount6, raiffeisen);
+        mapping.addMapping(bankAccount7, dsk);
+        mapping.addMapping(bankAccount3, dsk);
 
 //        System.out.println("How many account does a user have: ");
 
@@ -127,7 +142,7 @@ public class Application {
 //        System.out.println(bankAccount1.getAmountAvailable());
 //        System.out.println(bankAccount2.getAmountAvailable());
 
-//        System.out.println(bankAccount1.getTransferStatement());
+        System.out.println(bankAccount1.getTransferStatement());
 //        System.out.println(bankAccount1);
 
 

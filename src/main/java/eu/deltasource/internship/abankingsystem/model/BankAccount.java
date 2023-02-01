@@ -7,7 +7,7 @@ public class BankAccount {
     // the owner, iban, currency, amount available and its type. The type can be a
     // ‘current account’ or a ‘savings account’.
 
-    private final BankInstitution bankInstitution;
+    // private final BankInstitution bankInstitution;
 
     private final Owner owner;
 
@@ -33,11 +33,11 @@ public class BankAccount {
 //        return ownerList;
 //    }
 
-    public BankAccount(BankInstitution bankInstitution, Owner owner, String iban, String currency, double amountAvailable, char accountKey) {
+    public BankAccount(Owner owner, String iban, String currency, double amountAvailable, char accountKey) {
         if (existingIbans.contains(iban)) {
             throw new IllegalArgumentException("IBAN already exists");
         }
-        this.bankInstitution = bankInstitution;
+//        this.bankInstitution = bankInstitution;
         this.owner = owner;
         this.iban = iban;
         this.currency = currency;
@@ -46,10 +46,10 @@ public class BankAccount {
         this.transferStatement = new LinkedList<>();
         accounts.add(this);
         existingIbans.add(iban);
-        if(checkIfOwnerExists()) {
-            // add customer to bank
-            bankInstitution.getCustomers().add(owner);
-        }
+//        if(checkIfOwnerExists()) {
+//            // add customer to bank
+//            bankInstitution.getCustomers().add(owner);
+//        }
     }
 
     public static void ownerAccountCheck(Owner owner) {
@@ -63,9 +63,9 @@ public class BankAccount {
         System.out.println(newListOwner);
     }
 
-    public boolean checkIfOwnerExists() {
-        return !bankInstitution.getCustomers().contains(owner);
-    }
+//    public boolean checkIfOwnerExists() {
+//        return !bankInstitution.getCustomers().contains(owner);
+//    }
 
     public Owner getOwner() {
         return owner;
@@ -92,9 +92,9 @@ public class BankAccount {
         return typeAccount;
     }
 
-    public BankInstitution getBankInstitution() {
-        return bankInstitution;
-    }
+//    public BankInstitution getBankInstitution() {
+//        return bankInstitution;
+//    }
 
     public char getAccountKey() {
         return accountKey;

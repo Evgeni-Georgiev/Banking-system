@@ -4,10 +4,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class BankAccount {
-    // the owner, iban, currency, amount available and its type. The type can be a
-    // ‘current account’ or a ‘savings account’.
 
-    private final BankInstitution bankInstitution;
+    private final BankInstitution bankInstitution; // Account should not have access to bank institution.
 
     private final Owner owner;
 
@@ -23,15 +21,9 @@ public class BankAccount {
 
     private LinkedList<Transaction> transferStatement;
 
-//    private List<BankAccount> ownerList = new ArrayList<>();
-
     private static final ArrayList<BankAccount> accounts = new ArrayList<>();
 
     private static final List<String> existingIbans = new ArrayList<>();
-
-//    public List<BankAccount> getOwnerList() {
-//        return ownerList;
-//    }
 
     public BankAccount(BankInstitution bankInstitution, Owner owner, String iban, String currency, double amountAvailable, char accountKey) {
         if (existingIbans.contains(iban)) {
@@ -114,6 +106,10 @@ public class BankAccount {
 
     public void setTransferStatement(LinkedList<Transaction> transferStatement) {
         this.transferStatement = transferStatement;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transferStatement.add(transaction);
     }
 
     public LinkedList<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate) {

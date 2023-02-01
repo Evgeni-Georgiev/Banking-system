@@ -7,8 +7,6 @@ import java.util.*;
 
 public class BankInstitution {
 
-//    private BankInterface transactionInterface;
-
     private final String name;
 
     private final String address;
@@ -19,7 +17,10 @@ public class BankInstitution {
 
     private final Map<Currency, Double> exchangeRates;
 
-//    private LinkedList<Transaction> transferHistory;
+    // list of account
+    private List<BankAccount> allAccounts = new ArrayList<>();
+
+    private List<Transaction> allTransactions = new LinkedList<>();
 
     private int dayCountTime = 1;
 
@@ -28,6 +29,7 @@ public class BankInstitution {
         this.address = address;
         this.priceList = priceList;
         this.exchangeRates = exchangeRate;
+//        this.allAccounts = new ArrayList<>();
 //        this.transactionInterface = transactionInterface;
     }
 
@@ -59,6 +61,22 @@ public class BankInstitution {
         this.dayCountTime = dayCountTime;
     }
 
+    public List<BankAccount> getAllAccounts() {
+        return allAccounts;
+    }
+
+    public List<Transaction> getAllTransactions() {
+        return allTransactions;
+    }
+
+    public void addAllTransaction(Transaction transaction) {
+        allTransactions.add(transaction);
+    }
+
+    public void setAllTransactions(List<Transaction> allTransactions) {
+        this.allTransactions = allTransactions;
+    }
+
     @Override
     public String toString() {
         return String.format("%nBank Details: %n " +
@@ -67,12 +85,14 @@ public class BankInstitution {
                 "Customers: %s %n " +
                 "Taxes: %s %n " +
                 "Exchange rates available: %s %n " +
+                "All Transactions: %s %n " +
             getName(),
             getName(),
             getAddress(),
             getCustomers().size(),
             getPriceList(),
-            getExchangeRates()
+            getExchangeRates(),
+            allTransactions
         );
     }
 }

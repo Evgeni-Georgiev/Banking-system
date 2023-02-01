@@ -2,9 +2,7 @@ package eu.deltasource.internship.abankingsystem;
 
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
-import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
-import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.model.Owner;
@@ -43,6 +41,9 @@ public class Application {
         exchangeRates.put(Currency.BGNBGN, 1.0);
         exchangeRates.put(Currency.USDUSD, 1.0);
 
+//        List<BankAccount> allAccounts = new ArrayList<>();
+//        allAccounts.add(bankAccount1);
+
         BankInstitution dsk = new BankInstitution("DSK", "asdwqe 12 34", new HashMap<>() {{
             put(Taxes.TAX_TO_THE_SAME_BANK, 1.3);
             put(Taxes.TAX_TO_DIFFERENT_BANK, 2.3);
@@ -63,9 +64,10 @@ public class Application {
 
 //        System.out.println("How many account does a user have: ");
 
-//        System.out.println(bankAccount1.getAmountAvailable());
+        System.out.println(bankAccount1.getAmountAvailable());
 //        System.out.println(bankAccount2.getAmountAvailable());
         transactionImpl.deposit(bankAccount1, 20.00, "EUR");
+        System.out.println(bankAccount1.getAmountAvailable());
 
         try {
             transactionImpl.withDraw(bankAccount1, 20.00);
@@ -73,7 +75,7 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        System.out.println(bankAccount1.getAmountAvailable());
+//        System.out.println(bankAccount1.getAmountAvailable());
 
 //        System.out.println(bankAccount1.getAmountAvailable());
 
@@ -82,11 +84,13 @@ public class Application {
 //        System.out.println(bankAccount2.getAmountAvailable());
 
 
-//        try {
-//            transactionImpl.withDraw(bankAccount1, 200.00);
-//        } catch (InsufficientAmountWithdrawException e) {
-//            System.out.println("Insufficient amount to withdraw.");
-//        }
+        try {
+            transactionImpl.withDraw(bankAccount1, 20.00);
+            transactionImpl.withDraw(bankAccount2, 20.00);
+            transactionImpl.withDraw(bankAccount3, 20.00);
+        } catch (InsufficientAmountWithdrawException e) {
+            System.out.println("Insufficient amount to withdraw.");
+        }
 
 //        transactionImpl.withDraw(bankAccount1, 200.00);
 
@@ -116,19 +120,22 @@ public class Application {
 //        System.out.println(bankAccount2.getAmountAvailable());
 //
 
-        try {
-            transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
-            transactionImpl.transferBetweenAccounts(bankAccount2, bankAccount1, 10.0);
-            transactionImpl.transferBetweenAccounts(bankAccount3, bankAccount1, 10.0);
-        } catch (TransferBetweenNotCurrentAccountsException | InsufficientAmountTransferException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            transactionImpl.transferBetweenAccounts(dsk, bankAccount1, bankAccount2, 10.0);
+//            transactionImpl.transferBetweenAccounts(dsk, bankAccount2, bankAccount1, 10.0);
+//            transactionImpl.transferBetweenAccounts(dsk, bankAccount3, bankAccount1, 10.0);
+//        } catch (TransferBetweenNotCurrentAccountsException | InsufficientAmountTransferException e) {
+//            throw new RuntimeException(e);
+//        }
+
 //
 //        System.out.println(bankAccount1.getAmountAvailable());
 //        System.out.println(bankAccount2.getAmountAvailable());
 
 //        System.out.println(bankAccount1.getTransferStatement());
-//        System.out.println(bankAccount1);
+        System.out.println(bankAccount1);
+
+        System.out.println(dsk.getAllTransactions());
 
 
 //        transactionImpl.deposit(bankAccount1, 29.0, "USD");

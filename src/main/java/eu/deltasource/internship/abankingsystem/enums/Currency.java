@@ -1,4 +1,4 @@
-package eu.deltasource.internship.abankingsystem;
+package eu.deltasource.internship.abankingsystem.enums;
 
 public enum Currency {
 

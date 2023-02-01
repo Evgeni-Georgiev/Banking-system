@@ -1,4 +1,4 @@
-package eu.deltasource.internship.abankingsystem;
+package eu.deltasource.internship.abankingsystem.enums;
 
 public enum Taxes {
     TAX_TO_THE_SAME_BANK,

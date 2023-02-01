@@ -1,57 +1,27 @@
-package eu.deltasource.internship.abankingsystem;
-
-import eu.deltasource.internship.abankingsystem.service.BankService;
+package eu.deltasource.internship.abankingsystem.model;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Transaction {
 
-    private BankService transactionService = new BankService();
-
-    private BankAccount sourceAccount;
+    private final BankAccount sourceAccount;
 
     private BankAccount targetAccount;
 
-    private String sourceIban;
-
-    private String targetIban;
-
-    private BankInstitution sourceBank;
+    private final BankInstitution sourceBank;
 
     private BankInstitution targetBank;
 
-    private double amount;
+    private final double amount;
 
-    private String sourceCurrency;
+    private final String sourceCurrency;
 
     private String targetCurrency;
-
-    private String exchangeRate;
 
     private String TransactionType;
 
     private final LocalDate timestamp;
-
-//    public Transaction(String sourceIban, String targetIban, BankInstitution sourceBank, BankInstitution targetBank, double amount, String sourceCurrency, String targetCurrency, String timestamp) {
-//        this.sourceIban = sourceIban;
-//        this.targetIban = targetIban;
-//        this.sourceBank = sourceBank;
-//        this.targetBank = targetBank;
-//        this.amount = amount;
-//        this.sourceCurrency = sourceCurrency;
-//        this.targetCurrency = targetCurrency;
-////        this.exchangeRate = exchangeRate;
-//        this.timestamp = timestamp;
-//    }
-//
-//    public Transaction(String sourceIban, BankInstitution sourceBank, double amount, String sourceCurrency, String timestamp) {
-//        this.sourceIban = sourceIban;
-//        this.sourceBank = sourceBank;
-//        this.amount = amount;
-//        this.sourceCurrency = sourceCurrency;
-//        this.timestamp = timestamp;
-//    }
 
     public Transaction(BankAccount sourceAccount, BankAccount targetAccount, BankInstitution sourceBank, BankInstitution targetBank, double amount, String sourceCurrency, String targetCurrency, LocalDate timestamp) {
         this.sourceAccount = sourceAccount;
@@ -61,7 +31,6 @@ public class Transaction {
         this.amount = amount;
         this.sourceCurrency = sourceCurrency;
         this.targetCurrency = targetCurrency;
-//        this.exchangeRate = exchangeRate;
         this.timestamp = timestamp;
     }
 
@@ -71,31 +40,6 @@ public class Transaction {
         this.amount = amount;
         this.sourceCurrency = sourceCurrency;
         this.timestamp = timestamp;
-    }
-
-    public BankAccount getSourceAccount() {
-        return sourceAccount;
-    }
-
-    public void setSourceAccount(BankAccount sourceAccount) {
-        this.sourceAccount = sourceAccount;
-    }
-
-    public BankAccount getTargetAccount() {
-        return targetAccount;
-    }
-
-    public void setTargetAccount(BankAccount targetAccount) {
-        this.targetAccount = targetAccount;
-    }
-
-
-    public String getSourceIban() {
-        return sourceIban;
-    }
-
-    public String getTargetIban() {
-        return targetIban;
     }
 
     public BankInstitution getSourceBank() {
@@ -118,10 +62,6 @@ public class Transaction {
         return targetCurrency;
     }
 
-    public String getExchangeRate() {
-        return exchangeRate;
-    }
-
     public String getTransactionType() {
         return TransactionType;
     }
@@ -133,19 +73,6 @@ public class Transaction {
     public LocalDate getTimestamp() {
         return timestamp;
     }
-
-//    public void printTransferStatementsForAccount(String iban) {
-//        for (Transaction transaction : bankAccount) {
-//            if (transaction.getSourceIban() || transaction.getTargetIban())) {
-//                System.out.println("Source account: " + transaction.getSourceAccount().getIban());
-//                System.out.println("Target account: " + transaction.getTargetAccount().getIban());
-//                System.out.println("Amount: " + transaction.getAmount() + " " + transaction.getSourceCurrency());
-//                System.out.println("Exchange rate: " + transaction.getExchangeRate());
-//                System.out.println("Timestamp: " + transaction.getTimestamp());
-//                System.out.println("-----------------------------");
-//            }
-//        }
-//    }
 
     @Override
     public String toString() {

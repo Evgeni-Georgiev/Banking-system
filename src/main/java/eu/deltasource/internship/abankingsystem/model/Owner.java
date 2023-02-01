@@ -1,26 +1,16 @@
-package eu.deltasource.internship.abankingsystem;
+package eu.deltasource.internship.abankingsystem.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Owner {
 
-    private String name;
+    private final String name;
 
-    private List<BankAccount> bankAccounts = new ArrayList<>();
-
-    public List<BankAccount> getBankAccounts() {
-        return bankAccounts;
-    }
-
-    private List<BankAccount> ownerAccountCount = new ArrayList<>();
+    private final List<BankAccount> ownerAccountCount = new ArrayList<>();
 
     public List<BankAccount> getOwnerAccountCount() {
         return ownerAccountCount;
-    }
-
-    public void setOwnerAccountCount(List<BankAccount> ownerAccountCount) {
-        this.ownerAccountCount = ownerAccountCount;
     }
 
     public String getName() {
@@ -29,7 +19,6 @@ public class Owner {
 
     public Owner(String name) {
         this.name = name;
-//        bankAccounts.add(this);
     }
 
     @Override

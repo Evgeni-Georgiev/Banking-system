@@ -1,35 +1,34 @@
-package eu.deltasource.internship.abankingsystem;
+package eu.deltasource.internship.abankingsystem.model;
 
-import eu.deltasource.internship.abankingsystem.service.BankInterface;
+import eu.deltasource.internship.abankingsystem.enums.Currency;
+import eu.deltasource.internship.abankingsystem.enums.Taxes;
 
 import java.util.*;
 
 public class BankInstitution {
 
-    private BankInterface transactionInterface;
+//    private BankInterface transactionInterface;
 
-    private String name;
+    private final String name;
 
-    private String address;
+    private final String address;
 
-    private ArrayList<Owner> customers = new ArrayList<>();
+    private final ArrayList<Owner> customers = new ArrayList<>();
 
-    private HashMap<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
+    private final Map<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
 
-    private Map<Currency, Double> exchangeRates;
+    private final Map<Currency, Double> exchangeRates;
 
 //    private LinkedList<Transaction> transferHistory;
 
     private int dayCountTime = 1;
 
-    public BankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<Currency, Double> exchangeRate, BankInterface transactionInterface) {
+    public BankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<Currency, Double> exchangeRate) {
         this.name = name;
         this.address = address;
-//        this.customers = customers;
-        // FIXME: Should be implemented in Application. Every Bank can have different taxes.
         this.priceList = priceList;
         this.exchangeRates = exchangeRate;
-        this.transactionInterface = transactionInterface;
+//        this.transactionInterface = transactionInterface;
     }
 
     public String getName() {
@@ -44,7 +43,7 @@ public class BankInstitution {
         return customers;
     }
 
-    public HashMap<Taxes, Double> getPriceList() {
+    public Map<Taxes, Double> getPriceList() {
         return priceList;
     }
 
@@ -56,16 +55,8 @@ public class BankInstitution {
         return dayCountTime;
     }
 
-    public void setExchangeRates(Map<Currency, Double> exchangeRates) {
-        this.exchangeRates = exchangeRates;
-    }
-
     public void setDayCountTime(int dayCountTime) {
         this.dayCountTime = dayCountTime;
-    }
-
-    public void setPriceList(HashMap<Taxes, Double> priceList) {
-        this.priceList = priceList;
     }
 
     @Override

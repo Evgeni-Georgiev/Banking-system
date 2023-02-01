@@ -1,4 +1,4 @@
-package eu.deltasource.internship.abankingsystem;
+package eu.deltasource.internship.abankingsystem.model;
 
 import java.time.LocalDate;
 import java.util.*;

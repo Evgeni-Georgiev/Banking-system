@@ -1,8 +1,11 @@
 package eu.deltasource.internship.abankingsystem;
 
-import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
+import eu.deltasource.internship.abankingsystem.enums.Currency;
+import eu.deltasource.internship.abankingsystem.enums.Taxes;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
-import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
+import eu.deltasource.internship.abankingsystem.model.BankAccount;
+import eu.deltasource.internship.abankingsystem.model.BankInstitution;
+import eu.deltasource.internship.abankingsystem.model.Owner;
 import eu.deltasource.internship.abankingsystem.service.BankInterface;
 import eu.deltasource.internship.abankingsystem.service.BankService;
 
@@ -60,12 +63,31 @@ public class Application {
 
 //        System.out.println("How many account does a user have: ");
 
+//        System.out.println(bankAccount1.getAmountAvailable());
+//        System.out.println(bankAccount2.getAmountAvailable());
+        transactionImpl.deposit(bankAccount1, 20.00, "EUR");
 
         try {
-            transactionImpl.withDraw(bankAccount1, 200.00);
+            transactionImpl.withDraw(bankAccount1, 20.00);
         } catch (InsufficientAmountWithdrawException e) {
-            System.out.println("Insufficient amount to withdraw.");
+            throw new RuntimeException(e);
         }
+
+        System.out.println(bankAccount1.getAmountAvailable());
+
+//        System.out.println(bankAccount1.getAmountAvailable());
+
+
+
+//        System.out.println(bankAccount2.getAmountAvailable());
+
+
+//        try {
+//            transactionImpl.withDraw(bankAccount1, 200.00);
+//        } catch (InsufficientAmountWithdrawException e) {
+//            System.out.println("Insufficient amount to withdraw.");
+//        }
+
 //        transactionImpl.withDraw(bankAccount1, 200.00);
 
 
@@ -90,21 +112,30 @@ public class Application {
 
 //        System.out.println(bankAccount1);
 
-        System.out.println(bankAccount1.getAmountAvailable());
-        System.out.println(bankAccount2.getAmountAvailable());
+//        System.out.println(bankAccount1.getAmountAvailable());
+//        System.out.println(bankAccount2.getAmountAvailable());
+//
 
-        try {
-            transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 2000.0);
-        } catch (TransferBetweenNotCurrentAccountsException e) {
-            System.out.println("One of the two accounts is not current!");
-        } catch (InsufficientAmountTransferException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
+//            transactionImpl.transferBetweenAccounts(bankAccount2, bankAccount1, 10.0);
+//            transactionImpl.transferBetweenAccounts(bankAccount3, bankAccount1, 10.0);
+//        } catch (TransferBetweenNotCurrentAccountsException e) {
+//            System.out.println("One of the two accounts is not current!");
+//        } catch (InsufficientAmountTransferException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        System.out.println(bankAccount1.getAmountAvailable());
+//        System.out.println(bankAccount2.getAmountAvailable());
+
+//        System.out.println(bankAccount1.getTransferStatement());
+//        System.out.println(bankAccount1);
 
 
 //        transactionImpl.deposit(bankAccount1, 29.0, "USD");
-        System.out.println(bankAccount1.getAmountAvailable());
-        System.out.println(bankAccount2.getAmountAvailable());
+//        System.out.println(bankAccount1.getAmountAvailable());
+//        System.out.println(bankAccount2.getAmountAvailable());
 
         // TODO: If this account does not exist in the bank.
 //

@@ -24,8 +24,6 @@ public class Application {
         Owner vix = new Owner("Vix");
         Owner vix2 = new Owner("Vix");
 
-//        System.out.println(kilian);
-
 //        ArrayList<Owner> ownersList = new ArrayList<>();
 //        ownersList.add(simon);
 //        ownersList.add(kilian);
@@ -63,32 +61,68 @@ public class Application {
 
         BankAccount bankAccount1 = new BankAccount(simon, "toIBAN1", "EUR", 123.0, 'C');
         BankAccount bankAccount2 = new BankAccount(simon, "fromIBANOwner1", "EUR", 123.0, 'C');
+        BankAccount bankAccount3 = new BankAccount(kilian, "toIBAN3", "USD", 123.0, 'C');
         BankAccount bankAccount5 = new BankAccount(simon, "fromIBANOwner2", "EUR", 123.0, 'C');
         BankAccount bankAccount6 = new BankAccount(simon, "fromIBANOwner3", "EUR", 123.0, 'S');
         BankAccount bankAccount7 = new BankAccount(simon, "fromIBANOwner4DSK", "EUR", 123.0, 'C');
-        BankAccount bankAccount3 = new BankAccount(kilian, "toIBAN3", "USD", 123.0, 'C');
+        BankAccount bankAccount8 = new BankAccount(vix, "fromIBANOwnerVix", "EUR", 123.0, 'C');
 
-        BankAccountToBankMapping mapping = new BankAccountToBankMapping();
-        mapping.addMapping(bankAccount1, dsk);
-        mapping.addMapping(bankAccount2, raiffeisen);
-        mapping.addMapping(bankAccount5, raiffeisen);
-        mapping.addMapping(bankAccount6, raiffeisen);
-        mapping.addMapping(bankAccount7, dsk);
-        mapping.addMapping(bankAccount3, dsk);
+//        System.out.println(simon);
+
+//        BankAccountToBankMapping mapping = new BankAccountToBankMapping();
+//        mapping.addMapping(bankAccount1, dsk);
+//        mapping.addMapping(bankAccount2, raiffeisen);
+//        mapping.addMapping(bankAccount5, raiffeisen);
+//        mapping.addMapping(bankAccount6, raiffeisen);
+//        mapping.addMapping(bankAccount7, dsk);
+//        mapping.addMapping(bankAccount3, dsk);
+
+        BankAccountToBankMapping.mapping.put(bankAccount1, dsk);
+        BankAccountToBankMapping.mapping.put(bankAccount2, raiffeisen);
+        BankAccountToBankMapping.mapping.put(bankAccount5, raiffeisen);
+        BankAccountToBankMapping.mapping.put(bankAccount6, raiffeisen);
+        BankAccountToBankMapping.mapping.put(bankAccount7, dsk);
+        BankAccountToBankMapping.mapping.put(bankAccount3, dsk);
+        BankAccountToBankMapping.mapping.put(bankAccount8, dsk);
+
+//        if(!BankAccountToBankMapping.mapping.get(bankAccount1).getCustomers().contains(bankAccount1.getOwner())) {
+//            BankAccountToBankMapping.mapping.get(bankAccount1).getCustomers().add(bankAccount1.getOwner());
+//        }
+
+        dsk.getAllCustomersOfBank(bankAccount1);
+        dsk.getAllCustomersOfBank(bankAccount8);
+
+        System.out.println(BankAccountToBankMapping.mapping.get(bankAccount1).getCustomers().size());
+//        System.out.println(BankAccountToBankMapping.mapping.get(bankAccount1));
 
 //        System.out.println("How many account does a user have: ");
 
 //        System.out.println(bankAccount1.getAmountAvailable());
 //        System.out.println(bankAccount2.getAmountAvailable());
-        transactionImpl.deposit(bankAccount1, 20.00, "EUR");
 
-        try {
-            transactionImpl.withDraw(bankAccount1, 20.00);
-        } catch (InsufficientAmountWithdrawException e) {
-            throw new RuntimeException(e);
-        }
+
+//        System.out.println(bankAccount1.getAmountAvailable());
+//        transactionImpl.deposit(bankAccount1, 20.00, "EUR");
+//        System.out.println(bankAccount1.getAmountAvailable());
+
+
+//        System.out.println(bankAccount1.getAmountAvailable());
+//        transactionImpl.withDraw(bankAccount1, 10.00);
+//        System.out.println(bankAccount1.getAmountAvailable());
 
         System.out.println(bankAccount1.getAmountAvailable());
+        System.out.println(bankAccount2.getAmountAvailable());
+        transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
+        System.out.println(bankAccount1.getAmountAvailable());
+        System.out.println(bankAccount2.getAmountAvailable());
+
+//        try {
+//            transactionImpl.withDraw(bankAccount1, 20.00);
+//        } catch (InsufficientAmountWithdrawException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        System.out.println(bankAccount1.getAmountAvailable());
 
 //        System.out.println(bankAccount1.getAmountAvailable());
 
@@ -131,18 +165,18 @@ public class Application {
 //        System.out.println(bankAccount2.getAmountAvailable());
 //
 
-        try {
-            transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
-            transactionImpl.transferBetweenAccounts(bankAccount2, bankAccount1, 10.0);
-            transactionImpl.transferBetweenAccounts(bankAccount3, bankAccount1, 10.0);
-        } catch (TransferBetweenNotCurrentAccountsException | InsufficientAmountTransferException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
+//            transactionImpl.transferBetweenAccounts(bankAccount2, bankAccount1, 10.0);
+//            transactionImpl.transferBetweenAccounts(bankAccount3, bankAccount1, 10.0);
+//        } catch (TransferBetweenNotCurrentAccountsException | InsufficientAmountTransferException e) {
+//            throw new RuntimeException(e);
+//        }
 //
 //        System.out.println(bankAccount1.getAmountAvailable());
 //        System.out.println(bankAccount2.getAmountAvailable());
 
-        System.out.println(bankAccount1.getTransferStatement());
+//        System.out.println(bankAccount1.getTransferStatement());
 //        System.out.println(bankAccount1);
 
 

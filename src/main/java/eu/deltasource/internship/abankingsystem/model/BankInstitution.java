@@ -1,5 +1,6 @@
 package eu.deltasource.internship.abankingsystem.model;
 
+import eu.deltasource.internship.abankingsystem.BankAccountToBankMapping;
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
 
@@ -29,6 +30,12 @@ public class BankInstitution {
         this.priceList = priceList;
         this.exchangeRates = exchangeRate;
 //        this.transactionInterface = transactionInterface;
+    }
+
+    public void getAllCustomersOfBank(BankAccount bankAccount) {
+        if(!BankAccountToBankMapping.mapping.get(bankAccount).getCustomers().contains(bankAccount.getOwner())) {
+            BankAccountToBankMapping.mapping.get(bankAccount).getCustomers().add(bankAccount.getOwner());
+        }
     }
 
     public String getName() {

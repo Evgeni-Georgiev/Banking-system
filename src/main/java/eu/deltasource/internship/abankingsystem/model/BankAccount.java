@@ -23,15 +23,15 @@ public class BankAccount {
 
     private LinkedList<Transaction> transferStatement;
 
-//    private List<BankAccount> ownerList = new ArrayList<>();
+    private List<BankAccount> ownerList = new ArrayList<>();
 
     private static final ArrayList<BankAccount> accounts = new ArrayList<>();
 
     private static final List<String> existingIbans = new ArrayList<>();
 
-//    public List<BankAccount> getOwnerList() {
-//        return ownerList;
-//    }
+    public List<BankAccount> getOwnerList() {
+        return ownerList;
+    }
 
     public BankAccount(Owner owner, String iban, String currency, double amountAvailable, char accountKey) {
         if (existingIbans.contains(iban)) {

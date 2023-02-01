@@ -28,11 +28,16 @@ public class BankService implements BankInterface {
 
 
     BankAccountToBankMapping bankAccountToBankMapping = new BankAccountToBankMapping();
-//    private Map<BankAccount, BankInstitution> mapping = new HashMap<>();
+    private Map<BankAccount, BankInstitution> mapping = new HashMap<>();
 
-//    public void addAccountToBankMapping(BankAccount bankAccount, BankInstitution bank) {
-//        mapping.put(bankAccount, bank);
-//    }
+    public void addAccountToBankMapping(BankAccount bankAccount, BankInstitution bank) {
+        mapping.put(bankAccount, bank);
+    }
+
+    public BankInstitution getBankForAccount(BankAccount bankAccount) {
+        return mapping.get(bankAccount);
+    }
+
 //
 //    public BankInstitution getBank(BankAccount bankAccount) {
 //        return mapping.get(bankAccount);
@@ -55,11 +60,13 @@ public class BankService implements BankInterface {
      */
     private void makeTransaction(BankAccount fromAccount, BankAccount toAccount, double amount, String TransactionType) {
 
-//        BankInstitution bank = bankAccountToBankMapping.getBank(fromAccount);
+        BankInstitution bank = bankAccountToBankMapping.getBank(fromAccount);
 //        bankAccountToBankMapping.addMapping(fromAccount, bankAccountToBankMapping.getBank(fromAccount));
 //        bankAccountToBankMapping.addMapping(toAccount, bankAccountToBankMapping.getBank(toAccount));
 
 //        var dayCount = fromAccount.getBankInstitution().getDayCountTime();
+        addAccountToBankMapping(fromAccount, bank); // void
+        var qwe = getBankForAccount(fromAccount).getExchangeRates();
         var dayCount = bankAccountToBankMapping.getBank(fromAccount).getDayCountTime();
 
 //        List<BankAccount> keys = mapping.keySet().stream().toList();
@@ -93,16 +100,27 @@ public class BankService implements BankInterface {
         bankAccountToBankMapping.getBank(bankAccount).setDayCountTime(dayCount);
     }
 
-    private void transactionAmountBetweenTwoAccounts(BankAccount fromAccount, BankAccount toAccount, Double depositAmount, Taxes taxRate) throws InsufficientAmountTransferException {
+    private void transactionAmountBetweenTwoAccounts(BankAccount fromAccount, BankAccount toAccount, Double depositAmount, Taxes taxRate) {
 //        bankAccountToBankMapping.addMapping(fromAccount, bankAccountToBankMapping.getBank(fromAccount));
 //        bankAccountToBankMapping.addMapping(toAccount, bankAccountToBankMapping.getBank(toAccount));
 
+        // If not added will return: null
+        BankInstitution bankSource = bankAccountToBankMapping.getBank(fromAccount);
+        BankInstitution bankTarget = bankAccountToBankMapping.getBank(toAccount);
+        addAccountToBankMapping(fromAccount, bankSource);
+        addAccountToBankMapping(toAccount, bankTarget);
+        // If not added will return: null
+
         var source = fromAccount.getAmountAvailable();
         var target = toAccount.getAmountAvailable();
-        double res = depositAmount * exchangeRateAndTaxes(fromAccount, toAccount.getCurrency(), taxRate);
-        BankInstitution bank = bankAccountToBankMapping.getBank(fromAccount);
 
-        var amountAndTaxes = depositAmount + bank.getPriceList().get(taxRate);
+        double amountAfterExchange = exchangeRate(fromAccount, fromAccount.getCurrency()) * depositAmount;
+//        double res = amountAfterExchange + taxes(fromAccount, taxRate);
+
+//        double res = depositAmount * exchangeRateAndTaxes(fromAccount, toAccount.getCurrency(), taxRate);
+//        double res = exchangeRate(fromAccount, fromAccount.getCurrency()) * depositAmount;
+//        var amountAndTaxes = depositAmount + bank.getPriceList().get(taxRate);
+        double amountAndTaxes = amountAfterExchange + taxes(fromAccount, taxRate);
 
         // Case: If currency between two accounts is not the same.
         if(Objects.equals(fromAccount.getIban(), toAccount.getIban())) {
@@ -114,7 +132,7 @@ public class BankService implements BankInterface {
         }
 
         source -= amountAndTaxes;
-        target += res;
+        target += amountAfterExchange;
 
         fromAccount.setAmountAvailable(source);
         toAccount.setAmountAvailable(target);
@@ -122,8 +140,24 @@ public class BankService implements BankInterface {
 
     @Override
     public void deposit(BankAccount bankAccount, double depositAmount, String depositCurrency) {
+//        bankAccountToBankMapping.addMapping(bankAccount, bankAccountToBankMapping.getBank(bankAccount));
+
+//        BankAccountToBankMapping bankAccountToBankMapping1 = new BankAccountToBankMapping();
+//        bankAccountToBankMapping1.addMapping(bankAccount, bankAccountToBankMapping.getBank(bankAccount));
+//        var ress = bankAccountToBankMapping1.getBank(bankAccount);
+
+        BankInstitution bank = bankAccountToBankMapping.getBank(bankAccount);
+//        bankAccountToBankMapping.addMapping(fromAccount, bankAccountToBankMapping.getBank(fromAccount));
+//        bankAccountToBankMapping.addMapping(toAccount, bankAccountToBankMapping.getBank(toAccount));
+
+//        var dayCount = fromAccount.getBankInstitution().getDayCountTime();
+        addAccountToBankMapping(bankAccount, bank); // void
+        BankInstitution bank1 = getBankForAccount(bankAccount);
+
+//        BankInstitution bank = bankAccountToBankMapping.getBank(bankAccount);
         var amountAvailable = bankAccount.getAmountAvailable();
-        double res = depositAmount * exchangeRateAndTaxes(bankAccount, depositCurrency, Taxes.TAX_TO_THE_SAME_BANK);
+        double amountAfterExchange = exchangeRate(bankAccount, depositCurrency) * depositAmount;
+        double res = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
 
 //        amountAvailable += res;
         bankAccount.setAmountAvailable(amountAvailable + res);
@@ -133,9 +167,16 @@ public class BankService implements BankInterface {
 
     @Override
     public void withDraw(BankAccount bankAccount, Double withdrawAmount) throws InsufficientAmountWithdrawException {
+        // If not added will return: null
+        BankInstitution bank = bankAccountToBankMapping.getBank(bankAccount);
+        addAccountToBankMapping(bankAccount, bank);
+        // If not added will return: null
 
         var amountAvailable = bankAccount.getAmountAvailable();
-        Double finaTrans = withdrawAmount + exchangeRateAndTaxes(bankAccount, bankAccount.getCurrency(), Taxes.TAX_TO_THE_SAME_BANK);
+
+        double amountAfterExchange = exchangeRate(bankAccount, bankAccount.getCurrency()) * withdrawAmount;
+
+        Double finaTrans = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
 
         if(finaTrans.compareTo(amountAvailable) > 0) {
             throw new InsufficientAmountWithdrawException("Insufficient amount to withdraw!");
@@ -146,13 +187,35 @@ public class BankService implements BankInterface {
         makeTransactionForDepositOrWithdraw(bankAccount, withdrawAmount, "Withdraw");
     }
 
-    private double exchangeRateAndTaxes(BankAccount bankAccount, String depositCurrency, Taxes bankTaxes) {
-//        bankAccountToBankMapping.addMapping(bankAccount, bankAccountToBankMapping.getBank(bankAccount));
+//    private double exchangeRateAndTaxes(BankAccount bankAccount, String depositCurrency, Taxes bankTaxes) {
+//        var exchangeCurrency = bankAccount.getCurrency() + depositCurrency;
+//        Currency currencyUpdate = Currency.valueOf(exchangeCurrency);
+//        BankInstitution accountBank = bankAccountToBankMapping.getBank(bankAccount); // there is no bank here
+//
+//        BankInstitution bank = bankAccountToBankMapping.getBank(bankAccount);
+////        addAccountToBankMapping(bankAccount, bank);
+//        var bank1 = getBankForAccount(bankAccount).getExchangeRates();
+//
+//        // there is no bank here
+//        return bank1.get(currencyUpdate) + accountBank.getPriceList().get(bankTaxes);
+//    }
 
+    private double taxes(BankAccount bankAccount, Taxes bankTaxes) {
+        BankInstitution accountBank = bankAccountToBankMapping.getBank(bankAccount);
+//        var bank1 = getBankForAccount(bankAccount).getExchangeRates();
+        return accountBank.getPriceList().get(bankTaxes);
+    }
+
+    private double exchangeRate(BankAccount bankAccount, String depositCurrency) {
         var exchangeCurrency = bankAccount.getCurrency() + depositCurrency;
         Currency currencyUpdate = Currency.valueOf(exchangeCurrency);
-        BankInstitution accountBank = bankAccountToBankMapping.getBank(bankAccount);
-        return accountBank.getExchangeRates().get(currencyUpdate) + accountBank.getPriceList().get(bankTaxes);
+//        BankInstitution accountBank = bankAccountToBankMapping.getBank(bankAccount);
+
+//        BankInstitution bank = bankAccountToBankMapping.getBank(bankAccount);
+//        addAccountToBankMapping(bankAccount, bank);
+        var bank1 = getBankForAccount(bankAccount).getExchangeRates();
+
+        return bank1.get(currencyUpdate);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package eu.deltasource.internship.abankingsystem.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Owner {
@@ -10,6 +11,7 @@ public class Owner {
     private final List<BankAccount> ownerAccountCount = new ArrayList<>();
 
     public List<BankAccount> getOwnerAccountCount() {
+//        return Collections.unmodifiableList(ownerAccountCount);
         return ownerAccountCount;
     }
 

@@ -9,16 +9,16 @@ public class Owner {
 
     private final List<BankAccount> ownerAccountCount = new ArrayList<>();
 
-    public List<BankAccount> getOwnerAccountCount() {
-        return ownerAccountCount;
+    public Owner(String name) {
+        this.name = name;
     }
 
     public String getName() {
         return name;
     }
 
-    public Owner(String name) {
-        this.name = name;
+    public List<BankAccount> getOwnerAccountCount() {
+        return ownerAccountCount;
     }
 
     @Override

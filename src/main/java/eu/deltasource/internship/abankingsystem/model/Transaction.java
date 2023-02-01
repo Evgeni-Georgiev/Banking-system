@@ -74,10 +74,7 @@ public class Transaction {
         return timestamp;
     }
 
-    @Override
-    public String toString() {
-        // Can use StringBuilder
-
+    public String operationsStringOutput() {
         if(Objects.equals(getTransactionType(), "Deposit") || Objects.equals(getTransactionType(), "Withdraw")) {
             return String.format(
                 "%n  Source account: %s(%s) %n " +
@@ -109,6 +106,11 @@ public class Transaction {
                 getTransactionType(),
                 getTimestamp());
         }
+    }
+
+    @Override
+    public String toString() {
+        return operationsStringOutput();
     }
 
 }

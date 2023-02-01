@@ -1,9 +1,9 @@
 package eu.deltasource.internship.abankingsystem.service;
 
-import eu.deltasource.internship.abankingsystem.BankAccount;
-import eu.deltasource.internship.abankingsystem.Currency;
-import eu.deltasource.internship.abankingsystem.Taxes;
-import eu.deltasource.internship.abankingsystem.Transaction;
+import eu.deltasource.internship.abankingsystem.model.BankAccount;
+import eu.deltasource.internship.abankingsystem.enums.Currency;
+import eu.deltasource.internship.abankingsystem.enums.Taxes;
+import eu.deltasource.internship.abankingsystem.model.Transaction;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
 import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
@@ -27,6 +27,14 @@ public class BankService implements BankInterface {
     }
 
 
+    /**
+     * Method for creating transactions and setting all details to it.
+     *
+     * @param fromAccount - account transferring the amount
+     * @param toAccount - account receiving the amount
+     * @param amount - request account transaction
+     * @param TransactionType - Type of operation [transfer(between accounts), withdraw, deposit)]
+     */
     private void makeTransaction(BankAccount fromAccount, BankAccount toAccount, double amount, String TransactionType) {
 
         var dayCount = fromAccount.getBankInstitution().getDayCountTime();
@@ -49,12 +57,9 @@ public class BankService implements BankInterface {
     private void makeTransactionForDepositOrWithdraw(BankAccount bankAccount, double depositAmount, String TransactionType) {
 
         var dayCount = bankAccount.getBankInstitution().getDayCountTime();
-
         Transaction transaction = new Transaction(bankAccount, bankAccount.getBankInstitution(), depositAmount, bankAccount.getCurrency(), processLocalDate(dayCount));
-
         transaction.setTransactionType(TransactionType);
         bankAccount.getTransferStatement().add(transaction);
-
         dayCount++;
         bankAccount.getBankInstitution().setDayCountTime(dayCount);
     }
@@ -63,12 +68,7 @@ public class BankService implements BankInterface {
 
         var source = fromAccount.getAmountAvailable();
         var target = toAccount.getAmountAvailable();
-
-        var exchangeCurrency = fromAccount.getCurrency() + toAccount.getCurrency();
-        Currency currency = Currency.valueOf(exchangeCurrency);
-
-        var exchangeRateMap = fromAccount.getBankInstitution().getExchangeRates().get(currency);
-        double res = depositAmount * exchangeRateMap;
+        double res = depositAmount * exchangeRateAndTaxes(fromAccount, toAccount.getCurrency(), taxRate);
 
         var amountAndTaxes = depositAmount + fromAccount.getBankInstitution().getPriceList().get(taxRate);
 
@@ -89,17 +89,13 @@ public class BankService implements BankInterface {
     }
 
     @Override
-    public void deposit(BankAccount bankAccount, double depositAmount, String currency) {
-
+    public void deposit(BankAccount bankAccount, double depositAmount, String depositCurrency) {
         var amountAvailable = bankAccount.getAmountAvailable();
+        double res = depositAmount * exchangeRateAndTaxes(bankAccount, depositCurrency, Taxes.TAX_TO_THE_SAME_BANK);
 
-        var exchangeCurrency = bankAccount.getCurrency() + currency;
-        Currency currencyUpdate = Currency.valueOf(exchangeCurrency);
-
-        var exchangeRateMap = bankAccount.getBankInstitution().getExchangeRates().get(currencyUpdate);
-        double res = depositAmount * exchangeRateMap;
-        amountAvailable += res;
-        bankAccount.setAmountAvailable(amountAvailable);
+//        amountAvailable += res;
+        bankAccount.setAmountAvailable(amountAvailable + res);
+//        bankAccount.setAmountAvailable(amountAvailable);
         makeTransactionForDepositOrWithdraw(bankAccount, depositAmount, "Deposit");
     }
 
@@ -107,14 +103,21 @@ public class BankService implements BankInterface {
     public void withDraw(BankAccount bankAccount, Double withdrawAmount) throws InsufficientAmountWithdrawException {
 
         var amountAvailable = bankAccount.getAmountAvailable();
-        var exchangeRateMap = bankAccount.getBankInstitution().getPriceList().get(Taxes.TAX_TO_THE_SAME_BANK);
-        Double finaTrans = withdrawAmount + exchangeRateMap;
+        Double finaTrans = withdrawAmount + exchangeRateAndTaxes(bankAccount, bankAccount.getCurrency(), Taxes.TAX_TO_THE_SAME_BANK);
+
         if(finaTrans.compareTo(amountAvailable) > 0) {
             throw new InsufficientAmountWithdrawException("Insufficient amount to withdraw!");
         }
-        amountAvailable -= finaTrans;
-        bankAccount.setAmountAvailable(amountAvailable);
+//        amountAvailable -= finaTrans;
+        bankAccount.setAmountAvailable(amountAvailable - finaTrans);
+//        bankAccount.setAmountAvailable(amountAvailable);
         makeTransactionForDepositOrWithdraw(bankAccount, withdrawAmount, "Withdraw");
+    }
+
+    private double exchangeRateAndTaxes(BankAccount bankAccount, String depositCurrency, Taxes bankTaxes) {
+        var exchangeCurrency = bankAccount.getCurrency() + depositCurrency;
+        Currency currencyUpdate = Currency.valueOf(exchangeCurrency);
+        return bankAccount.getBankInstitution().getExchangeRates().get(currencyUpdate) + bankAccount.getBankInstitution().getPriceList().get(bankTaxes);
     }
 
     @Override

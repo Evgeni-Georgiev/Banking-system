@@ -1,6 +1,6 @@
 package eu.deltasource.internship.abankingsystem.service;
 
-import eu.deltasource.internship.abankingsystem.BankAccount;
+import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
 import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;

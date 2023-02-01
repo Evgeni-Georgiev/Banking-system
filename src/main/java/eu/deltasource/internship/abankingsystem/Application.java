@@ -2,7 +2,9 @@ package eu.deltasource.internship.abankingsystem;
 
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
+import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
+import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.model.Owner;
@@ -44,14 +46,12 @@ public class Application {
         BankInstitution dsk = new BankInstitution("DSK", "asdwqe 12 34", new HashMap<>() {{
             put(Taxes.TAX_TO_THE_SAME_BANK, 1.3);
             put(Taxes.TAX_TO_DIFFERENT_BANK, 2.3);
-        }}, exchangeRates, transactionImpl);
-
-//        System.out.println(dsk.getCustomers());
+        }}, exchangeRates);
 
         BankInstitution raiffeisen = new BankInstitution("Raiffeisen", "asdwqe 12 34", new HashMap<>() {{
             put(Taxes.TAX_TO_THE_SAME_BANK, 3.3);
             put(Taxes.TAX_TO_DIFFERENT_BANK, 5.3);
-        }}, exchangeRates, transactionImpl);
+        }}, exchangeRates);
 
 
         BankAccount bankAccount1 = new BankAccount(dsk, simon, "toIBAN1", "EUR", 123.0, 'C');
@@ -116,15 +116,13 @@ public class Application {
 //        System.out.println(bankAccount2.getAmountAvailable());
 //
 
-//        try {
-//            transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
-//            transactionImpl.transferBetweenAccounts(bankAccount2, bankAccount1, 10.0);
-//            transactionImpl.transferBetweenAccounts(bankAccount3, bankAccount1, 10.0);
-//        } catch (TransferBetweenNotCurrentAccountsException e) {
-//            System.out.println("One of the two accounts is not current!");
-//        } catch (InsufficientAmountTransferException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
+            transactionImpl.transferBetweenAccounts(bankAccount2, bankAccount1, 10.0);
+            transactionImpl.transferBetweenAccounts(bankAccount3, bankAccount1, 10.0);
+        } catch (TransferBetweenNotCurrentAccountsException | InsufficientAmountTransferException e) {
+            throw new RuntimeException(e);
+        }
 //
 //        System.out.println(bankAccount1.getAmountAvailable());
 //        System.out.println(bankAccount2.getAmountAvailable());

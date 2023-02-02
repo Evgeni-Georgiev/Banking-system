@@ -1,17 +1,15 @@
 package eu.deltasource.internship.abankingsystem.service;
 
+import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
-import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
-import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
-import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
 
 public interface BankInterface {
 
-    void transferBetweenAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount) throws TransferBetweenNotCurrentAccountsException, InsufficientAmountTransferException;
+    void transferBetweenAccounts(BankAccount fromAccount, BankAccount toAccount, double depositAmount);
 
-    void deposit(BankAccount bankAccount, double depositAmount, String currency);
+    void deposit(BankAccount bankAccount, double depositAmount, Currency depositCurrency);
 
-    void withDraw(BankAccount bankAccount, Double withdrawAmount) throws InsufficientAmountWithdrawException;
+    void withDraw(BankAccount bankAccount, Double withdrawAmount);
 
     void transactionHistory(BankAccount bankAccount);
 

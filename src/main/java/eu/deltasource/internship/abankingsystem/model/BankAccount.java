@@ -1,5 +1,7 @@
 package eu.deltasource.internship.abankingsystem.model;
 
+import eu.deltasource.internship.abankingsystem.enums.Currency;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -13,7 +15,7 @@ public class BankAccount {
 
     private final String iban;
 
-    private final String currency;
+    private final Currency currency;
 
     private Double amountAvailable;
 
@@ -33,7 +35,7 @@ public class BankAccount {
         return ownerList;
     }
 
-    public BankAccount(Owner owner, String iban, String currency, double amountAvailable, char accountKey) {
+    public BankAccount(Owner owner, String iban, Currency currency, double amountAvailable, char accountKey) {
         if (existingIbans.contains(iban)) {
             throw new IllegalArgumentException("IBAN already exists");
         }
@@ -63,10 +65,6 @@ public class BankAccount {
         System.out.println(newListOwner);
     }
 
-//    public boolean checkIfOwnerExists() {
-//        return !bankInstitution.getCustomers().contains(owner);
-//    }
-
     public Owner getOwner() {
         return owner;
     }
@@ -75,7 +73,7 @@ public class BankAccount {
         return iban;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -91,10 +89,6 @@ public class BankAccount {
         }
         return typeAccount;
     }
-
-//    public BankInstitution getBankInstitution() {
-//        return bankInstitution;
-//    }
 
     public char getAccountKey() {
         return accountKey;
@@ -116,7 +110,7 @@ public class BankAccount {
         this.transferStatement = transferStatement;
     }
 
-    public LinkedList<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate) {
+    public List<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate) {
         LinkedList<Transaction> statements = new LinkedList<>();
         for(Transaction transaction : transferStatement) {
             LocalDate datesFromTransaction = transaction.getTimestamp();
@@ -124,7 +118,7 @@ public class BankAccount {
                 statements.add(transaction);
             }
         }
-        return statements;
+        return Collections.unmodifiableList(statements);
     }
 
     @Override

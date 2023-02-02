@@ -5,17 +5,24 @@ import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.service.BankInterface;
 import eu.deltasource.internship.abankingsystem.service.BankService;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BankAccountToBankMapping {
-    public static Map<BankAccount, BankInstitution> mapping = new HashMap<>();
+    private final Map<BankAccount, BankInstitution> mapping = new HashMap<>();
 
-    public Map<BankAccount, BankInstitution> getMapping() {
-        return mapping;
-    }
+//    public Map<BankAccount, BankInstitution> getMapping() {
+//        return Collections.unmodifiableMap(mapping);
+////        return mapping;
+//    }
 
     public void addMapping(BankAccount bankAccount, BankInstitution bank) {
+//        transactionImpl.checkIfOwnerExists(bankAccount);
+        mapping.put(bankAccount, bank);
+    }
+
+    public void addAccountToBankMapping(BankAccount bankAccount, BankInstitution bank) {
 //        transactionImpl.checkIfOwnerExists(bankAccount);
         mapping.put(bankAccount, bank);
     }

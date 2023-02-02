@@ -1,7 +1,7 @@
 package eu.deltasource.internship.abankingsystem.model;
 
 import eu.deltasource.internship.abankingsystem.BankAccountToBankMapping;
-import eu.deltasource.internship.abankingsystem.enums.Currency;
+import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
 
 import java.util.*;
@@ -9,6 +9,8 @@ import java.util.*;
 public class BankInstitution {
 
 //    private BankInterface transactionInterface;
+
+    private BankAccountToBankMapping bankAccountToBankMapping;
 
     private final String name;
 
@@ -18,13 +20,13 @@ public class BankInstitution {
 
     private final Map<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
 
-    private final Map<Currency, Double> exchangeRates;
+    private final Map<ExchangeRate, Double> exchangeRates;
 
 //    private LinkedList<Transaction> transferHistory;
 
     private int dayCountTime = 1;
 
-    public BankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<Currency, Double> exchangeRate) {
+    public BankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
         this.name = name;
         this.address = address;
         this.priceList = priceList;
@@ -32,11 +34,11 @@ public class BankInstitution {
 //        this.transactionInterface = transactionInterface;
     }
 
-    public void getAllCustomersOfBank(BankAccount bankAccount) {
-        if(!BankAccountToBankMapping.mapping.get(bankAccount).getCustomers().contains(bankAccount.getOwner())) {
-            BankAccountToBankMapping.mapping.get(bankAccount).getCustomers().add(bankAccount.getOwner());
-        }
-    }
+//    public void getAllCustomersOfBank(BankAccount bankAccount) {
+//        if(!bankAccountToBankMapping.getBank(bankAccount).getCustomers().contains(bankAccount.getOwner())) {
+//            bankAccountToBankMapping.getBank(bankAccount).getCustomers().add(bankAccount.getOwner());
+//        }
+//    }
 
     public String getName() {
         return name;
@@ -54,7 +56,7 @@ public class BankInstitution {
         return priceList;
     }
 
-    public Map<Currency, Double> getExchangeRates() {
+    public Map<ExchangeRate, Double> getExchangeRates() {
         return exchangeRates;
     }
 

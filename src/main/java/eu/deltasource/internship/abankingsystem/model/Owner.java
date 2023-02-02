@@ -11,8 +11,7 @@ public class Owner {
     private final List<BankAccount> ownerAccountCount = new ArrayList<>();
 
     public List<BankAccount> getOwnerAccountCount() {
-//        return Collections.unmodifiableList(ownerAccountCount);
-        return ownerAccountCount;
+        return Collections.unmodifiableList(ownerAccountCount);
     }
 
     public String getName() {

@@ -1,13 +1,14 @@
 package eu.deltasource.internship.abankingsystem.model;
 
 import eu.deltasource.internship.abankingsystem.BankAccountToBankMapping;
+import eu.deltasource.internship.abankingsystem.enums.Currency;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Transaction {
 
-    private BankAccountToBankMapping bankAccountToBankMapping;
+//    private BankAccountToBankMapping bankAccountToBankMapping;
 
     private final BankAccount sourceAccount;
 
@@ -19,15 +20,15 @@ public class Transaction {
 
     private final double amount;
 
-    private final String sourceCurrency;
+    private final Currency sourceCurrency;
 
-    private String targetCurrency;
+    private Currency targetCurrency;
 
     private String TransactionType;
 
     private final LocalDate timestamp;
 
-    public Transaction(BankAccount sourceAccount, BankAccount targetAccount, BankInstitution sourceBank, BankInstitution targetBank, double amount, String sourceCurrency, String targetCurrency, LocalDate timestamp) {
+    public Transaction(BankAccount sourceAccount, BankAccount targetAccount, BankInstitution sourceBank, BankInstitution targetBank, double amount, Currency sourceCurrency, Currency targetCurrency, LocalDate timestamp) {
         this.sourceAccount = sourceAccount;
         this.targetAccount = targetAccount;
         this.sourceBank = sourceBank;
@@ -38,7 +39,7 @@ public class Transaction {
         this.timestamp = timestamp;
     }
 
-    public Transaction(BankAccount sourceAccount, BankInstitution sourceBank, double amount, String sourceCurrency, LocalDate timestamp) {
+    public Transaction(BankAccount sourceAccount, BankInstitution sourceBank, double amount, Currency sourceCurrency, LocalDate timestamp) {
         this.sourceAccount = sourceAccount;
         this.sourceBank = sourceBank;
         this.amount = amount;
@@ -58,11 +59,11 @@ public class Transaction {
         return amount;
     }
 
-    public String getSourceCurrency() {
+    public Currency getSourceCurrency() {
         return sourceCurrency;
     }
 
-    public String getTargetCurrency() {
+    public Currency getTargetCurrency() {
         return targetCurrency;
     }
 
@@ -78,10 +79,7 @@ public class Transaction {
         return timestamp;
     }
 
-    @Override
-    public String toString() {
-        // Can use StringBuilder
-
+    public String operationsStringOutput() {
         if(Objects.equals(getTransactionType(), "Deposit") || Objects.equals(getTransactionType(), "Withdraw")) {
             return String.format(
                 "%n  Source account: %s(%s) %n " +
@@ -97,15 +95,15 @@ public class Transaction {
                 getTimestamp());
         } else {
             return String.format(
-                "%n  Source account: %s(%s) %n  Target account: %s(%s) %n " +
+                "%n  Source account: %s %n  Target account: %s %n " +
                     " Transferred amount: (%s)%,.2f %n  Source currency: %s %n " +
                     " Target currency: %s %n " +
                     " Transaction type: %s %n " +
                     " Timestamp: %s %n",
                 sourceAccount.getIban(),
-                bankAccountToBankMapping.getBank(sourceAccount).getName(),
+//                bankAccountToBankMapping.getBank(sourceAccount).getName(),
                 targetAccount.getIban(),
-                bankAccountToBankMapping.getBank(sourceAccount).getName(),
+//                bankAccountToBankMapping.getBank(sourceAccount).getName(),
                 getSourceCurrency(),
                 getAmount(),
                 getSourceCurrency(),
@@ -113,6 +111,11 @@ public class Transaction {
                 getTransactionType(),
                 getTimestamp());
         }
+    }
+
+    @Override
+    public String toString() {
+        return operationsStringOutput();
     }
 
 }

@@ -32,7 +32,8 @@ public class BankAccount {
     private static final List<String> existingIbans = new ArrayList<>();
 
     public List<BankAccount> getOwnerList() {
-        return ownerList;
+        return Collections.unmodifiableList(ownerList);
+//        return ownerList;
     }
 
     public BankAccount(Owner owner, String iban, Currency currency, double amountAvailable, char accountKey) {
@@ -94,8 +95,9 @@ public class BankAccount {
         return accountKey;
     }
 
-    public static ArrayList<BankAccount> getAccounts() {
-        return accounts;
+    public static List<BankAccount> getAccounts() {
+        return Collections.unmodifiableList(accounts);
+//        return accounts;
     }
 
     public void setAmountAvailable(double amountAvailable) {

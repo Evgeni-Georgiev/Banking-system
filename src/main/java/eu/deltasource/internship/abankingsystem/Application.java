@@ -91,6 +91,8 @@ public class Application {
         LocalDate end = LocalDate.of(2023, 2, 8);
         System.out.println(bankAccount1.getTransferStatementLocal(start, end));
 
+        transactionImpl.transactionHistory(bankAccount1);
+
 //        System.out.println(bankAccount1.getTransferStatement());
 
     }

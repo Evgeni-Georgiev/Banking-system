@@ -1,14 +1,11 @@
 package eu.deltasource.internship.abankingsystem.model;
 
-import eu.deltasource.internship.abankingsystem.BankAccountToBankMapping;
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Transaction {
-
-//    private BankAccountToBankMapping bankAccountToBankMapping;
 
     private final BankAccount sourceAccount;
 

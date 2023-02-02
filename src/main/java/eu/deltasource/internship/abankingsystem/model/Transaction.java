@@ -21,7 +21,7 @@ public class Transaction {
 
     private Currency targetCurrency;
 
-    private String TransactionType;
+    private String transactionType; // Should be an enum
 
     private final LocalDate timestamp;
 
@@ -65,11 +65,11 @@ public class Transaction {
     }
 
     public String getTransactionType() {
-        return TransactionType;
+        return transactionType;
     }
 
     public void setTransactionType(String transactionType) {
-        TransactionType = transactionType;
+        this.transactionType = transactionType;
     }
 
     public LocalDate getTimestamp() {

@@ -5,11 +5,7 @@ import eu.deltasource.internship.abankingsystem.enums.Currency;
 import java.time.LocalDate;
 import java.util.*;
 
-public class BankAccount {
-    // the owner, iban, currency, amount available and its type. The type can be a
-    // ‘current account’ or a ‘savings account’.
-
-    // private final BankInstitution bankInstitution;
+public abstract class BankAccount {
 
     private final Owner owner;
 
@@ -21,46 +17,37 @@ public class BankAccount {
 
     private final char accountKey;
 
-    private String typeAccount;
-
     private LinkedList<Transaction> transferStatement;
 
-    private List<BankAccount> ownerList = new ArrayList<>();
+//    private final List<BankAccount> ownerList = new ArrayList<>();
 
     private static final ArrayList<BankAccount> accounts = new ArrayList<>();
 
     private static final List<String> existingIbans = new ArrayList<>();
 
-    public List<BankAccount> getOwnerList() {
-        return Collections.unmodifiableList(ownerList);
-//        return ownerList;
-    }
+//    public List<BankAccount> getOwnerList() {
+//        return Collections.unmodifiableList(ownerList);
+//    }
 
     public BankAccount(Owner owner, String iban, Currency currency, double amountAvailable, char accountKey) {
         if (existingIbans.contains(iban)) {
             throw new IllegalArgumentException("IBAN already exists");
         }
-//        this.bankInstitution = bankInstitution;
         this.owner = owner;
-        this.iban = iban;
+        this.iban = normalizeIban(iban);
         this.currency = currency;
         this.amountAvailable = amountAvailable;
-        this.accountKey = accountKey;
+        this.accountKey = normalizeAccountKey(accountKey);
         this.transferStatement = new LinkedList<>();
         accounts.add(this);
         existingIbans.add(iban);
-//        if(checkIfOwnerExists()) {
-//            // add customer to bank
-//            bankInstitution.getCustomers().add(owner);
-//        }
     }
 
-    public static void ownerAccountCheck(Owner owner) {
+    public static void countOfAccountOwnerHas(Owner owner) {
         List<BankAccount> newListOwner = new ArrayList<>();
-        for(var singleOwner : accounts) {
-            if(singleOwner.getOwner().getName().equals(owner.getName())) {
-//                owner.getBankAccounts().add(bankAccount);
-                newListOwner.add(singleOwner);
+        for(var singleAccount : accounts) {
+            if(singleAccount.getOwner().getName().equals(owner.getName())) {
+                newListOwner.add(singleAccount);
             }
         }
         System.out.println(newListOwner);
@@ -82,22 +69,23 @@ public class BankAccount {
         return amountAvailable;
     }
 
-    public String getTypeAccount() {
-        if(accountKey == 'C') {
-            typeAccount = "Current account";
-        } else {
-            typeAccount = "Savings account";
-        }
-        return typeAccount;
-    }
+    protected abstract String getAccountType();
+
 
     public char getAccountKey() {
         return accountKey;
     }
+    private char normalizeAccountKey(final char accountKey) {
+        return Character.toUpperCase(accountKey);
+    }
 
-    public static List<BankAccount> getAccounts() {
-        return Collections.unmodifiableList(accounts);
-//        return accounts;
+
+//    public static List<BankAccount> getAccounts() {
+//        return Collections.unmodifiableList(accounts);
+//    }
+
+    private String normalizeIban(final String Iban) {
+        return null != Iban ? Iban.toUpperCase() : null;
     }
 
     public void setAmountAvailable(double amountAvailable) {
@@ -110,6 +98,10 @@ public class BankAccount {
 
     public void setTransferStatement(LinkedList<Transaction> transferStatement) {
         this.transferStatement = transferStatement;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transferStatement.add(transaction);
     }
 
     public List<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate) {
@@ -138,7 +130,7 @@ public class BankAccount {
             getCurrency(),
             getAmountAvailable(),
             getAccountKey(),
-            getTypeAccount(),
+            getAccountType(),
             transferStatement
         );
     }

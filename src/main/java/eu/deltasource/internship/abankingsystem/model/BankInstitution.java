@@ -1,16 +1,13 @@
 package eu.deltasource.internship.abankingsystem.model;
 
-import eu.deltasource.internship.abankingsystem.BankAccountToBankMapping;
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BankInstitution {
-
-//    private BankInterface transactionInterface;
-
-    private BankAccountToBankMapping bankAccountToBankMapping;
 
     private final String name;
 
@@ -22,8 +19,6 @@ public class BankInstitution {
 
     private final Map<ExchangeRate, Double> exchangeRates;
 
-//    private LinkedList<Transaction> transferHistory;
-
     private int dayCountTime = 1;
 
     public BankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
@@ -31,14 +26,7 @@ public class BankInstitution {
         this.address = address;
         this.priceList = priceList;
         this.exchangeRates = exchangeRate;
-//        this.transactionInterface = transactionInterface;
     }
-
-//    public void getAllCustomersOfBank(BankAccount bankAccount) {
-//        if(!bankAccountToBankMapping.getBank(bankAccount).getCustomers().contains(bankAccount.getOwner())) {
-//            bankAccountToBankMapping.getBank(bankAccount).getCustomers().add(bankAccount.getOwner());
-//        }
-//    }
 
     public String getName() {
         return name;

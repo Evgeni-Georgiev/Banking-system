@@ -1,12 +1,14 @@
 package eu.deltasource.internship.abankingsystem;
 
+import eu.deltasource.internship.abankingsystem.accountType.CurrentAccount;
+import eu.deltasource.internship.abankingsystem.accountType.SavingsAccount;
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.model.Owner;
-import eu.deltasource.internship.abankingsystem.service.BankService;
+import eu.deltasource.internship.abankingsystem.service.TransactionServiceImpl;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -15,8 +17,7 @@ import java.util.Map;
 public class Application {
     public static void main(String[] args) {
 
-        BankService transactionImpl = new BankService();
-//        BankAccountToBankMapping bankAccountToBankMapping = new BankAccountToBankMapping();
+        TransactionServiceImpl transactionImpl = new TransactionServiceImpl();
 
         Owner simon = new Owner("Simon");
         Owner kilian = new Owner("Kilian");
@@ -44,13 +45,13 @@ public class Application {
             put(Taxes.TAX_TO_DIFFERENT_BANK, 5.3);
         }}, exchangeRates);
 
-        BankAccount bankAccount1 = new BankAccount(simon, "toIBAN1", Currency.EUR, 123.0, 'C');
-        BankAccount bankAccount2 = new BankAccount(simon, "fromIBANOwner1", Currency.EUR, 123.0, 'C');
-        BankAccount bankAccount3 = new BankAccount(kilian, "toIBAN3", Currency.USD, 123.0, 'C');
-        BankAccount bankAccount5 = new BankAccount(simon, "fromIBANOwner2", Currency.EUR, 123.0, 'C');
-        BankAccount bankAccount6 = new BankAccount(simon, "fromIBANOwner3", Currency.EUR, 123.0, 'S');
-        BankAccount bankAccount7 = new BankAccount(simon, "fromIBANOwner4DSK", Currency.EUR, 123.0, 'C');
-        BankAccount bankAccount8 = new BankAccount(vix, "fromIBANOwnerVix", Currency.EUR, 123.0, 'C');
+        BankAccount bankAccount1 = new CurrentAccount(simon, "toIBAN1", Currency.EUR, 123.0, 'C');
+        BankAccount bankAccount2 = new CurrentAccount(simon, "fromIBANOwner1", Currency.EUR, 123.0, 'C');
+        BankAccount bankAccount3 = new CurrentAccount(kilian, "toIBAN3", Currency.USD, 123.0, 'C');
+        BankAccount bankAccount5 = new CurrentAccount(simon, "fromIBANOwner2", Currency.EUR, 123.0, 'C');
+        BankAccount bankAccount6 = new SavingsAccount(simon, "fromIBANOwner3", Currency.EUR, 123.0, 'S');
+        BankAccount bankAccount7 = new CurrentAccount(simon, "fromIBANOwner4DSK", Currency.EUR, 123.0, 'C');
+        BankAccount bankAccount8 = new SavingsAccount(vix, "fromIBANOwnerVix", Currency.EUR, 123.0, 'C');
 
         transactionImpl.bankAccountToBankMapping.addAccountToBankMapping(bankAccount1, dsk);
         transactionImpl.bankAccountToBankMapping.addAccountToBankMapping(bankAccount2, raiffeisen);
@@ -59,25 +60,16 @@ public class Application {
         transactionImpl.bankAccountToBankMapping.addAccountToBankMapping(bankAccount7, dsk);
         transactionImpl.bankAccountToBankMapping.addAccountToBankMapping(bankAccount3, dsk);
 
-//        BankAccountToBankMapping.mapping.put(bankAccount1, dsk);
-//        BankAccountToBankMapping.mapping.put(bankAccount2, raiffeisen);
-//        BankAccountToBankMapping.mapping.put(bankAccount5, raiffeisen);
-//        transactionImpl.bankAccountToBankMapping.addAccountToBankMapping(bankAccount5, raiffeisen);
-//        BankAccountToBankMapping.mapping.put(bankAccount6, raiffeisen);
-//        BankAccountToBankMapping.mapping.put(bankAccount7, dsk);
-//        BankAccountToBankMapping.mapping.put(bankAccount3, dsk);
-//        BankAccountToBankMapping.mapping.put(bankAccount8, dsk);
-
         System.out.println(bankAccount1.getAmountAvailable());
         System.out.println(bankAccount2.getAmountAvailable());
-        transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
-        transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
-        transactionImpl.transferBetweenAccounts(bankAccount1, bankAccount2, 10.0);
+        transactionImpl.transfer(bankAccount1, bankAccount2, 10.0);
+        transactionImpl.transfer(bankAccount1, bankAccount3, 10.0);
+        transactionImpl.transfer(bankAccount1, bankAccount5, 10.0);
         System.out.println(bankAccount1.getAmountAvailable());
         System.out.println(bankAccount2.getAmountAvailable());
 
         System.out.println(bankAccount1.getAmountAvailable());
-        transactionImpl.withDraw(bankAccount1, 20.00);
+        transactionImpl.withdraw(bankAccount1, 20.00);
         System.out.println(bankAccount1.getAmountAvailable());
 
         // cannot deposit negative amount -- exception
@@ -93,7 +85,10 @@ public class Application {
 
         transactionImpl.transactionHistory(bankAccount1);
 
-//        System.out.println(bankAccount1.getTransferStatement());
+        System.out.println(bankAccount1.getTransferStatement());
+
+//         check how many accounts does a customer have
+        BankAccount.countOfAccountOwnerHas(vix);
 
     }
 }

@@ -3,9 +3,7 @@ package eu.deltasource.internship.abankingsystem.model;
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BankInstitution {
 
@@ -18,6 +16,8 @@ public class BankInstitution {
     private final Map<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
 
     private final Map<ExchangeRate, Double> exchangeRates;
+
+    private final List<BankAccount> bankAccounts = new ArrayList<>();
 
     private int dayCountTime = 1;
 
@@ -55,6 +55,15 @@ public class BankInstitution {
     public void setDayCountTime(int dayCountTime) {
         this.dayCountTime = dayCountTime;
     }
+
+    public void addAccountToBank(final BankAccount bankAccount) {
+        bankAccounts.add(bankAccount);
+    }
+
+    public List<BankAccount> getBankAccounts() {
+        return Collections.unmodifiableList(bankAccounts);
+    }
+
 
     @Override
     public String toString() {

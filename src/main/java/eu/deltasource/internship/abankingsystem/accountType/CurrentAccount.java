@@ -5,6 +5,7 @@ import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.Owner;
 
 public class CurrentAccount extends BankAccount {
+
     public CurrentAccount(Owner owner, String iban, Currency currency, double amountAvailable, char accountKey) {
         super(owner, iban, currency, amountAvailable, accountKey);
     }
@@ -14,7 +15,4 @@ public class CurrentAccount extends BankAccount {
         return "Current Account";
     }
 
-//    public String getTypeAccount(BankAccount bankAccount) {
-//        return "Current Account";
-//    }
 }

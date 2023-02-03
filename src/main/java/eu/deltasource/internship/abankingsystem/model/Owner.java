@@ -6,20 +6,37 @@ import java.util.List;
 
 public class Owner {
 
+    private int id;
+
     private final String name;
 
     private final List<BankAccount> ownerAccountCount = new ArrayList<>();
+
+    private final List<BankAccount> bankAccounts = new ArrayList<>();
+
+    public Owner(String name) {
+        this.name = name;
+    }
+
+    public Owner(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public List<BankAccount> getOwnerAccountCount() {
         return Collections.unmodifiableList(ownerAccountCount);
     }
 
-    public String getName() {
-        return name;
+    public void addAccountToOwner(final BankAccount bankAccount) {
+        bankAccounts.add(bankAccount);
     }
 
-    public Owner(String name) {
-        this.name = name;
+    public List<BankAccount> getBankAccounts() {
+        return Collections.unmodifiableList(bankAccounts);
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -28,4 +45,5 @@ public class Owner {
             "%n Name: %s %n " +
             "%n Count of accounts for this Owner: %s %n ", getName(), getOwnerAccountCount().size());
     }
+
 }

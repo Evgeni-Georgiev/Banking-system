@@ -1,8 +1,8 @@
 package eu.deltasource.internship.abankingsystem.exception;
 
-public class InvalidIbanException extends Exception {
-    public InvalidIbanException (String str) {
-        // calling the constructor of parent Exception
-        super(str);
+public class InvalidIbanException extends RuntimeException {
+
+    public InvalidIbanException (String message) {
+        super(message);
     }
 }

@@ -21,17 +21,6 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
         accounts.add(bankAccount);
     }
 
-//    private static final List<BankAccount> accounts = new ArrayList<>();
-//    public static void countOfAccountBankHas(BankInstitution bankInstitution) {
-//        List<BankAccount> newListOwner = new ArrayList<>();
-//        for (var singleAccount : accounts) {
-//            if (singleAccount.getOwner().getName().equals(owner.getName())) {
-//                newListOwner.add(singleAccount);
-//            }
-//        }
-//        System.out.println(newListOwner);
-//    }
-
     public static void countOfAccountOwnerHas(Owner owner) {
         List<BankAccount> newListOwner = new ArrayList<>();
         for (var singleAccount : accounts) {

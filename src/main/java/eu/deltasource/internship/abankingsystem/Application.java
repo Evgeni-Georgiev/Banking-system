@@ -46,15 +46,6 @@ public class Application {
         TransactionRepository transactionRepository = TransactionRepositoryImpl.getInstance();
         TransactionService transactionService = new TransactionServiceImpl(transactionRepository, bankInstitutionRepository, bankAccountRepository);
 
-
-//		Map<Taxes, Double> taxMap1 = new HashMap<>();
-//		taxMap1.put(Taxes.TAX_TO_THE_SAME_BANK, 2.10);
-//		taxMap1.put(Taxes.TAX_TO_DIFFERENT_BANK, 3.05);
-//
-//		Map<Taxes, Double> taxMap2 = new HashMap<>();
-//		taxMap1.put(Taxes.TAX_TO_THE_SAME_BANK, 1.10);
-//		taxMap1.put(Taxes.TAX_TO_DIFFERENT_BANK, 1.05);
-
         Map<ExchangeRate, Double> exchangeRates = new HashMap<>();
         exchangeRates.put(ExchangeRate.BGNEUR, 1.95);
         exchangeRates.put(ExchangeRate.BGNUSD, 1.79);
@@ -65,16 +56,6 @@ public class Application {
         exchangeRates.put(ExchangeRate.EUREUR, 1.0);
         exchangeRates.put(ExchangeRate.BGNBGN, 1.0);
         exchangeRates.put(ExchangeRate.USDUSD, 1.0);
-
-//        bankInstitutionRepository.addPriceListToMap(Taxes.TAX_TO_THE_SAME_BANK, 1.3);
-//        bankInstitutionRepository.addPriceListToMap(Taxes.TAX_TO_DIFFERENT_BANK, 2.3);
-
-//		Double tax1 = bankInstitutionRepository.getTaxByTax(Taxes.TAX_TO_THE_SAME_BANK);
-//		Double tax2 = bankInstitutionRepository.getTaxByTax(Taxes.TAX_TO_DIFFERENT_BANK);
-//		System.out.println("TAX: ");
-//		System.out.println(tax1);
-//		System.out.println(tax2);
-//		System.out.println("TAX: ");
 
 
         // Create owner
@@ -94,47 +75,16 @@ public class Application {
 
         // Create BankInstitution
 
-//        bankInstitutionService.createBankInstitution("DSK", "NY 10001", exchangeRates);
-
-//        bankInstitutionService.createBankInstitution("Raiffeisen", "London EC3V 9EL", exchangeRates);
-
-//        bankInstitutionService.createBankInstitution("DSK", "NY 10001", new HashMap<>() {{
-//            put(Taxes.TAX_TO_THE_SAME_BANK, 1.3);
-//            put(Taxes.TAX_TO_DIFFERENT_BANK, 2.3);
-//        }}, exchangeRates);
-//
-//        bankInstitutionService.createBankInstitution("Raiffeisen", "London EC3V 9EL", new HashMap<>() {{
-//            put(Taxes.TAX_TO_THE_SAME_BANK, 3.3);
-//            put(Taxes.TAX_TO_DIFFERENT_BANK, 5.3);
-//        }}, exchangeRates);
-
 		bankInstitutionService.createBankInstitution("DSK", "NY 10001", exchangeRates);
-
 		bankInstitutionService.createBankInstitution("Raiffeisen", "London EC3V 9EL", exchangeRates);
 
         // Get BankInstitution by id
         BankInstitution dsk = bankInstitutionService.getBankInstitutionById(1);
         BankInstitution raiffeisen = bankInstitutionService.getBankInstitutionById(2);
 
-//		Map<Taxes, Double> makermap = new HashMap<>();
-//		makermap.put(Taxes.TAX_TO_THE_SAME_BANK, tax1);
-//		makermap.put(Taxes.TAX_TO_DIFFERENT_BANK, tax2);
-
-//		bankInstitutionRepository.addTaxToBankMap(dsk);
-
-//        bankInstitutionRepository.addBankAccountsToBank();
-
         // Add BankInstitution to Map(db)
         bankInstitutionRepository.addBankToMap(dsk);
         bankInstitutionRepository.addBankToMap(raiffeisen);
-
-//		System.out.println(bankInstitutionRepository.getTaxMap(dsk));
-//		System.out.println(bankInstitutionRepository.getTaxMap(raiffeisen));
-
-//		bankInstitutionRepository.addTaxToBankMap(dsk);
-//		bankInstitutionRepository.addTaxToBankMap(raiffeisen);
-
-//		System.out.println(bankInstitutionRepository.getTaxByBank(dsk, Taxes.TAX_TO_THE_SAME_BANK));
 
 
         // Create account
@@ -152,17 +102,14 @@ public class Application {
 		taxMap2.put(Taxes.TAX_TO_DIFFERENT_BANK, 1.05);
 		bankInstitutionRepository.addTaxToBankMap(raiffeisen, taxMap2);
 
-//		System.out.println(bankInstitutionRepository.findTaxesByBank(dsk));
-//		System.out.println(bankInstitutionRepository.findTaxesByBank(raiffeisen));
-
 		Map<Taxes, Double> retrievedTaxMap1 = bankInstitutionRepository.getTaxMap(dsk);
 		Map<Taxes, Double> retrievedTaxMap2 = bankInstitutionRepository.getTaxMap(raiffeisen);
 
-		System.out.println(retrievedTaxMap1);
-		System.out.println(retrievedTaxMap2);
+//		System.out.println(retrievedTaxMap1);
+//		System.out.println(retrievedTaxMap2);
 
-		System.out.println(dsk);
-		System.out.println(raiffeisen);
+//		System.out.println(dsk);
+//		System.out.println(raiffeisen);
 
 		List<Taxes> taxesToAdd1 = List.of(Taxes.TAX_TO_THE_SAME_BANK, Taxes.TAX_TO_DIFFERENT_BANK);
 		List<Taxes> taxesToAdd2 = List.of(Taxes.TAX_TO_THE_SAME_BANK, Taxes.TAX_TO_DIFFERENT_BANK);
@@ -204,10 +151,10 @@ public class Application {
         System.out.println("Current amount of source account: " + bankAccount1.getAmountAvailable());
         System.out.println("Current amount of target account: " + bankAccount2.getAmountAvailable());
         transactionService.transfer(bankAccount1, bankAccount2, 10.0);
-//        transactionService.transfer(bankAccount2, bankAccount1, 10.0);
-//        transactionService.transfer(bankAccount3, bankAccount1, 10.0);
-//        transactionService.transfer(bankAccount3, bankAccount2, 10.0);
-//        transactionService.transfer(bankAccount2, bankAccount3, 10.0);
+        transactionService.transfer(bankAccount2, bankAccount1, 10.0);
+        transactionService.transfer(bankAccount3, bankAccount1, 10.0);
+        transactionService.transfer(bankAccount3, bankAccount2, 10.0);
+        transactionService.transfer(bankAccount2, bankAccount3, 10.0);
         System.out.println("After transfer: " + bankAccount2.getAmountAvailable());
         System.out.println("After transfer of source account: " + bankAccount1.getAmountAvailable());
         System.out.println("After transfer of source account: " + bankAccount2.getAmountAvailable());
@@ -231,19 +178,10 @@ public class Application {
 //        System.out.println(bankAccount1.getTransferStatementLocal(start, end));
         System.out.println(bankAccountRepository.getTransferStatementLocal(start, end));
 
-//        System.out.println(bankAccountRepository.getTransferStatement(bankAccount2));
+        System.out.println(bankAccountRepository.getTransferStatement(bankAccount2));
 
-//        transactionService.transactionHistory(bankAccount1);
-
-//        System.out.println(bankAccountRepository.getTransferStatement(bankAccount1));
-
-//        System.out.println(bankAccount1.getTransferStatement());
-
-//        BankAccount.countOfAccountOwnerHas(vix);
-//        transactionService.transactionHistory(bankAccount1);
-
-//        System.out.println(bankAccountRepository.getTransferStatement(bankAccount1));
-//        System.out.println(ownerRepository.getOwner(bankAccount1));
+        System.out.println(bankAccountRepository.getTransferStatement(bankAccount1));
+        System.out.println(ownerRepository.getOwner(bankAccount1));
 
         countOfAccountOwnerHas(simon);
 

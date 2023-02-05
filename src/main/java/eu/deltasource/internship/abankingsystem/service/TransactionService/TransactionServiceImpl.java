@@ -64,25 +64,9 @@ public class TransactionServiceImpl implements TransactionService {
             .setTargetBank(bankInstitutionRepository.getBank(toAccount))
             .setTargetCurrency(toAccount.getCurrency())
             .build();
-
         transaction.setTransactionType(TransactionType);
-
-        var sourceAccount = bankAccountRepository.getByIban(fromAccount.getIban());
-        var targetAccount = bankAccountRepository.getByIban(toAccount.getIban());
-//        bankAccountRepository.getByIban(fromAccount.getIban()).addTransaction(transaction);
-//        bankAccountRepository.getByIban(toAccount.getIban()).addTransaction(transaction);
         bankAccountRepository.addTransaction(transaction);
-//        fromAccount.addTransaction(transaction);
-//        toAccount.addTransaction(transaction);
-
-
-//        bankAccountRepository.getByIban(fromAccount.getIban());
-
-//        fromAccount.setTransferStatement(fromAccount.getTransferStatement()); // delete
-//        toAccount.setTransferStatement(toAccount.getTransferStatement()); // delete
-
         transactionRepository.createTransaction(transaction);
-
         dayCount++;
         bankInstitutionRepository.getBank(fromAccount).setDayCountTime(dayCount);
     }
@@ -106,16 +90,7 @@ public class TransactionServiceImpl implements TransactionService {
             processLocalDate(dayCount))
             .build();
         transaction.setTransactionType(TransactionType);
-
-//        bankAccount.addTransaction(transaction);
-
-//        bankAccount.setTransferStatement(bankAccount.getTransferStatement()); // delete
-
         bankAccountRepository.addTransaction(transaction);
-
-//        bankAccountRepository.getByIban(bankAccount.getIban()).addTransaction(transaction);
-
-
         transactionRepository.createTransaction(transaction);
         dayCount++;
         bankInstitutionRepository.getBank(bankAccount).setDayCountTime(dayCount);
@@ -133,12 +108,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         var source = fromAccount.getAmountAvailable();
         var target = toAccount.getAmountAvailable();
-
-//		var sourceAccountsBank = bankInstitutionRepository.getBank(fromAccount).getPriceList();
 		var sourceAccountsBank = bankInstitutionRepository.getBank(fromAccount);
-
         double amountAfterExchange = exchangeRate(fromAccount, fromAccount.getCurrency()) * depositAmount;
-//        double amountAndTaxes = amountAfterExchange + taxes(fromAccount, taxRate);
         double amountAndTaxes = amountAfterExchange + bankInstitutionRepository.getTaxMap(sourceAccountsBank).get(taxRate);
         if (Objects.equals(fromAccount.getIban(), toAccount.getIban())) {
             throw new IllegalArgumentException("IBANs are the same!");
@@ -157,18 +128,16 @@ public class TransactionServiceImpl implements TransactionService {
 
         var amountAvailable = bankAccount.getAmountAvailable();
         double amountAfterExchange = exchangeRate(bankAccount, depositCurrency) * depositAmount;
-//        double res = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
         double res = amountAfterExchange + bankInstitutionRepository.getTaxMap(bankInstitutionRepository.getBank(bankAccount)).get(Taxes.TAX_TO_THE_SAME_BANK);
         bankAccount.setAmountAvailable(amountAvailable + res);
         makeTransactionForDepositOrWithdraw(bankAccount, depositAmount, "Deposit");
     }
 
     @Override
-    public void withdraw(BankAccount bankAccount, Double withdrawAmount) throws InsufficientAmountWithdrawException {
+    public void withdraw(BankAccount bankAccount, Double withdrawAmount) {
 
         var amountAvailable = bankAccount.getAmountAvailable();
         double amountAfterExchange = exchangeRate(bankAccount, bankAccount.getCurrency()) * withdrawAmount;
-//        Double finaTrans = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
         Double finaTrans = amountAfterExchange + bankInstitutionRepository.getTaxMap(bankInstitutionRepository.getBank(bankAccount)).get(Taxes.TAX_TO_THE_SAME_BANK);
         if (finaTrans.compareTo(amountAvailable) > 0) {
             throw new InsufficientAmountWithdrawException("Insufficient amount to withdraw!");
@@ -176,24 +145,6 @@ public class TransactionServiceImpl implements TransactionService {
         bankAccount.setAmountAvailable(amountAvailable - finaTrans);
         makeTransactionForDepositOrWithdraw(bankAccount, withdrawAmount, "Withdraw");
     }
-
-//    /**
-//     * Fetch the taxes of the Bank whose account is making the operation.
-//     *
-//     * @param bankTaxes - Type of Tax to calculate
-//     */
-//    private double taxes(BankAccount bankAccount, Taxes bankTaxes) {
-//
-//        // Get the bank that is assigned to account through map
-//        BankInstitution accountBank = bankInstitutionRepository.getBank(bankAccount);
-////		bankInstitutionRepository.addTaxToBankMap(accountBank, bankTaxes);
-//
-////		return bankInstitutionRepository.getTaxByBank(accountBank, bankTaxes);
-//		return bankInstitutionRepository.getTaxMap(accountBank);
-////		return bankInstitutionRepository.getTaxByTax(bankTaxes);
-//
-////        return accountBank.getPriceList().get(bankTaxes);
-//    }
 
     /**
      * Fetch exchange rates
@@ -205,13 +156,12 @@ public class TransactionServiceImpl implements TransactionService {
 
         var exchangeCurrency = bankAccount.getCurrency() + depositCurrency.getCurrency();
         ExchangeRate exchangeRateUpdate = ExchangeRate.valueOf(exchangeCurrency);
-        // Get the exchange rate of the bank that is assigned to this account through map
         var bankExchangeRateMap = bankInstitutionRepository.getBank(bankAccount).getExchangeRates();
         return bankExchangeRateMap.get(exchangeRateUpdate);
     }
 
     @Override
-    public void transfer(BankAccount fromAccount, BankAccount toAccount, double depositAmount) throws TransferBetweenNotCurrentAccountsException, InsufficientAmountTransferException {
+    public void transfer(BankAccount fromAccount, BankAccount toAccount, double depositAmount) {
 
         if (fromAccount.getAccountKey() == 'C' && toAccount.getAccountKey() == 'C') {
             if (bankInstitutionRepository.getBank(fromAccount) == bankInstitutionRepository.getBank(toAccount)) {
@@ -221,14 +171,8 @@ public class TransactionServiceImpl implements TransactionService {
             }
             makeTransactionTransfer(fromAccount, toAccount, depositAmount, "Transfer");
         } else {
-            throw new TransferBetweenNotCurrentAccountsException("One of the two accounts is not current!");
+            throw new TransferBetweenNotCurrentAccountsException("Both accounts must be current!");
         }
     }
-
-//    @Override
-//    public void transactionHistory(BankAccountRepository bankAccount) {
-//
-//        System.out.println("\nTransaction Statement for " + bankAccount.getByIban() + ": " + bankAccount.getTransferStatement());
-//    }
 
 }

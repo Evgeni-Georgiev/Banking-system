@@ -39,6 +39,14 @@ public class Transaction {
         this.timestamp = transactionBuilder.timestamp;
     }
 
+    public BankAccount getSourceAccount() {
+        return sourceAccount;
+    }
+
+    public BankAccount getTargetAccount() {
+        return targetAccount;
+    }
+
     public BankInstitution getSourceBank() {
         return sourceBank;
     }
@@ -147,8 +155,7 @@ public class Transaction {
             return this;
         }
 
-        public TransactionBuilder setId(int id)
-        {
+        public TransactionBuilder setId(int id) {
             this.id = id;
             return this;
         }

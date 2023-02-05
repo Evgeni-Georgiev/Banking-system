@@ -9,6 +9,7 @@ import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurr
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.model.Transaction;
+import eu.deltasource.internship.abankingsystem.repository.bankAccountRepository.BankAccountRepository;
 import eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepository.BankInstitutionRepository;
 import eu.deltasource.internship.abankingsystem.repository.transactionRepository.TransactionRepository;
 
@@ -24,9 +25,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final BankInstitutionRepository bankInstitutionRepository;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository, BankInstitutionRepository bankInstitutionRepository) {
+    private final BankAccountRepository bankAccountRepository;
+
+    public TransactionServiceImpl(TransactionRepository transactionRepository, BankInstitutionRepository bankInstitutionRepository, BankAccountRepository bankAccountRepository) {
         this.bankInstitutionRepository = bankInstitutionRepository;
         this.transactionRepository = transactionRepository;
+        this.bankAccountRepository = bankAccountRepository;
     }
 
     /**
@@ -51,20 +55,35 @@ public class TransactionServiceImpl implements TransactionService {
     private void makeTransactionTransfer(BankAccount fromAccount, BankAccount toAccount, double amount, String TransactionType) {
 
         var dayCount = bankInstitutionRepository.getBank(fromAccount).getDayCountTime();
-        Transaction transaction = new Transaction.TransactionBuilder(fromAccount,
+        Transaction transaction = new Transaction.TransactionBuilder(
+            fromAccount,
             bankInstitutionRepository.getBank(fromAccount),
-            amount, fromAccount.getCurrency(),
+            amount,
+            fromAccount.getCurrency(),
             processLocalDate(dayCount))
             .setTargetAccount(toAccount)
             .setTargetBank(bankInstitutionRepository.getBank(toAccount))
             .setTargetCurrency(toAccount.getCurrency())
             .build();
+
         transaction.setTransactionType(TransactionType);
-        fromAccount.addTransaction(transaction);
-        toAccount.addTransaction(transaction);
-        fromAccount.setTransferStatement(fromAccount.getTransferStatement());
-        toAccount.setTransferStatement(toAccount.getTransferStatement());
+
+        var sourceAccount = bankAccountRepository.getByIban(fromAccount.getIban());
+        var targetAccount = bankAccountRepository.getByIban(toAccount.getIban());
+//        bankAccountRepository.getByIban(fromAccount.getIban()).addTransaction(transaction);
+//        bankAccountRepository.getByIban(toAccount.getIban()).addTransaction(transaction);
+        bankAccountRepository.addTransaction(transaction);
+//        fromAccount.addTransaction(transaction);
+//        toAccount.addTransaction(transaction);
+
+
+//        bankAccountRepository.getByIban(fromAccount.getIban());
+
+//        fromAccount.setTransferStatement(fromAccount.getTransferStatement()); // delete
+//        toAccount.setTransferStatement(toAccount.getTransferStatement()); // delete
+
         transactionRepository.createTransaction(transaction);
+
         dayCount++;
         bankInstitutionRepository.getBank(fromAccount).setDayCountTime(dayCount);
     }
@@ -78,7 +97,7 @@ public class TransactionServiceImpl implements TransactionService {
      */
     private void makeTransactionForDepositOrWithdraw(BankAccount bankAccount, double depositAmount, String TransactionType) {
 
-        // get the count of days from BankInstitution using map through the account that is assigned to that bank.
+        // Get the count of days from BankInstitution using map through the account that is assigned to that bank.
         var dayCount = bankInstitutionRepository.getBank(bankAccount).getDayCountTime();
         Transaction transaction = new Transaction.TransactionBuilder(
             bankAccount,
@@ -88,7 +107,17 @@ public class TransactionServiceImpl implements TransactionService {
             processLocalDate(dayCount))
             .build();
         transaction.setTransactionType(TransactionType);
-        bankAccount.addTransaction(transaction);
+
+//        bankAccount.addTransaction(transaction);
+
+//        bankAccount.setTransferStatement(bankAccount.getTransferStatement()); // delete
+
+        bankAccountRepository.addTransaction(transaction);
+
+//        bankAccountRepository.getByIban(bankAccount.getIban()).addTransaction(transaction);
+
+
+        transactionRepository.createTransaction(transaction);
         dayCount++;
         bankInstitutionRepository.getBank(bankAccount).setDayCountTime(dayCount);
     }
@@ -184,10 +213,10 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    @Override
-    public void transactionHistory(BankAccount bankAccount) {
-
-        System.out.println("\nTransaction Statement for " + bankAccount.getIban() + ": " + bankAccount.getTransferStatement());
-    }
+//    @Override
+//    public void transactionHistory(BankAccountRepository bankAccount) {
+//
+//        System.out.println("\nTransaction Statement for " + bankAccount.getByIban() + ": " + bankAccount.getTransferStatement());
+//    }
 
 }

@@ -36,6 +36,6 @@ public interface TransactionService {
      *
      * @param bankAccount selected account to output transactions of
      */
-    void transactionHistory(BankAccount bankAccount);
+//    void transactionHistory(BankAccount bankAccount);
 
 }

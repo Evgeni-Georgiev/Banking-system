@@ -3,26 +3,18 @@ package eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepos
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BankInstitutionRepositoryImpl implements BankInstitutionRepository {
 
     private final Map<Integer, BankInstitution> bankInstitutionMap = new HashMap<>();
 
+    private final List<BankAccount> bankAccounts = new ArrayList<>();
+
     private int idCounter = 1;
-
-    private static BankInstitutionRepository instance = null;
-
-    public static BankInstitutionRepository getInstance() {
-        if (instance == null) {
-            instance = new BankInstitutionRepositoryImpl();
-        }
-
-        return instance;
-    }
-
-    private BankInstitutionRepositoryImpl() {}
 
     @Override
     public void addBankToMap(final BankInstitution bankInstitution) {
@@ -51,4 +43,17 @@ public class BankInstitutionRepositoryImpl implements BankInstitutionRepository 
     public BankInstitution getBankById(int id) {
         return bankInstitutionMap.get(id);
     }
+
+    private static BankInstitutionRepository instance = null;
+
+    public static BankInstitutionRepository getInstance() {
+        if (instance == null) {
+            instance = new BankInstitutionRepositoryImpl();
+        }
+
+        return instance;
+    }
+
+    private BankInstitutionRepositoryImpl() {}
+
 }

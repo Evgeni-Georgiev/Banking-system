@@ -6,6 +6,7 @@ public enum Currency {
     EUR("EUR");
 
     final String currencyString;
+
     Currency(String currencyString) {
         this.currencyString = currencyString;
     }

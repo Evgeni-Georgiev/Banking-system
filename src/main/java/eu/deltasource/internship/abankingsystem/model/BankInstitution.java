@@ -3,7 +3,10 @@ package eu.deltasource.internship.abankingsystem.model;
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class BankInstitution {
 
@@ -11,7 +14,7 @@ public class BankInstitution {
 
     private final String address;
 
-    private final ArrayList<Owner> customers = new ArrayList<>();
+    private final List<Owner> customers = new ArrayList<>();
 
     private final Map<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
 
@@ -21,7 +24,7 @@ public class BankInstitution {
 
     private int dayCountTime = 1;
 
-    public BankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
+    public BankInstitution(String name, String address, Map<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
         this.name = name;
         this.address = address;
         this.priceList = priceList;
@@ -36,7 +39,7 @@ public class BankInstitution {
         return address;
     }
 
-    public ArrayList<Owner> getCustomers() {
+    public List<Owner> getCustomers() {
         return customers;
     }
 
@@ -70,15 +73,15 @@ public class BankInstitution {
         return String.format("%nBank Details: %n " +
                 "Name: %s %n " +
                 "Address: %s %n " +
-                "Customers: %s %n " +
-                "Taxes: %s %n " +
-                "Exchange rates available: %s %n " +
+//                "Customers: %s %n " +
+//                "Taxes: %s %n " +
+//                "Exchange rates available: %s %n " +
             getName(),
             getName(),
-            getAddress(),
-            getCustomers().size(),
-            getPriceList(),
-            getExchangeRates()
+            getAddress()
+//            getCustomers().size(),
+//            getPriceList(),
+//            getExchangeRates()
         );
     }
 }

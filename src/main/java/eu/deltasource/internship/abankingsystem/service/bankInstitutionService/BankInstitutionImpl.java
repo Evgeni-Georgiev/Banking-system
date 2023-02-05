@@ -5,10 +5,9 @@ import eu.deltasource.internship.abankingsystem.enums.Taxes;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepository.BankInstitutionRepository;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class BankInstitutionImpl implements BankInstitutionService{
+public class BankInstitutionImpl implements BankInstitutionService {
 
     private final BankInstitutionRepository bankInstitutionRepository;
 
@@ -16,8 +15,12 @@ public class BankInstitutionImpl implements BankInstitutionService{
         this.bankInstitutionRepository = bankInstitutionRepository;
     }
 
+//    public void createExchangeRates(Taxes taxes, Double priceTax) {
+//        bankInstitutionRepository.addPriceList(taxes, priceTax);
+//    }
+
     @Override
-    public void createBankInstitution(String name, String address, HashMap<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
+    public void createBankInstitution(String name, String address, Map<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
         BankInstitution newBankInstitution = new BankInstitution(name, address, priceList, exchangeRate);
         bankInstitutionRepository.addBankToMap(newBankInstitution);
     }

@@ -1,6 +1,10 @@
 package eu.deltasource.internship.abankingsystem.repository.bankAccountRepository;
 
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
+import eu.deltasource.internship.abankingsystem.model.Transaction;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface BankAccountRepository {
     /**
@@ -12,4 +16,11 @@ public interface BankAccountRepository {
      * Returns bank account by IBAN
      */
     BankAccount getByIban(final String iban);
+
+    List<Transaction> getTransferStatement(BankAccount bankAccount);
+
+    void addTransaction(Transaction transaction);
+
+    List<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate);
+
 }

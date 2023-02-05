@@ -20,7 +20,6 @@ public interface BankInstitutionRepository {
      */
     BankInstitution getBankById(int id);
 
-
     /**
      * Assign bank to account.
      *

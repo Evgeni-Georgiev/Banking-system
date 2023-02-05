@@ -1,7 +1,6 @@
 package eu.deltasource.internship.abankingsystem.service.bankInstitutionService;
 
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
-import eu.deltasource.internship.abankingsystem.enums.Taxes;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepository.BankInstitutionRepository;
 
@@ -20,8 +19,9 @@ public class BankInstitutionImpl implements BankInstitutionService {
 //    }
 
     @Override
-    public void createBankInstitution(String name, String address, Map<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
-        BankInstitution newBankInstitution = new BankInstitution(name, address, priceList, exchangeRate);
+    public void createBankInstitution(String name, String address, Map<ExchangeRate, Double> exchangeRate) {
+        BankInstitution newBankInstitution = new BankInstitution(name, address, exchangeRate);
+//		bankInstitutionRepository.addTaxToBankMap(newBankInstitution);
         bankInstitutionRepository.addBankToMap(newBankInstitution);
     }
 

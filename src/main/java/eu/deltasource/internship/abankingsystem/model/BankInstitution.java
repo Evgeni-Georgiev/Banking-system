@@ -1,7 +1,6 @@
 package eu.deltasource.internship.abankingsystem.model;
 
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
-import eu.deltasource.internship.abankingsystem.enums.Taxes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,9 +13,9 @@ public class BankInstitution {
 
     private final String address;
 
-    private final List<Owner> customers = new ArrayList<>();
+//    private final List<Owner> customers = new ArrayList<>();
 
-    private final Map<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
+//    private final Map<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
 
     private final Map<ExchangeRate, Double> exchangeRates;
 
@@ -24,10 +23,9 @@ public class BankInstitution {
 
     private int dayCountTime = 1;
 
-    public BankInstitution(String name, String address, Map<Taxes, Double> priceList, Map<ExchangeRate, Double> exchangeRate) {
+    public BankInstitution(String name, String address, Map<ExchangeRate, Double> exchangeRate) {
         this.name = name;
         this.address = address;
-        this.priceList = priceList;
         this.exchangeRates = exchangeRate;
     }
 
@@ -39,13 +37,13 @@ public class BankInstitution {
         return address;
     }
 
-    public List<Owner> getCustomers() {
-        return customers;
-    }
+//    public List<Owner> getCustomers() {
+//        return customers;
+//    }
 
-    public Map<Taxes, Double> getPriceList() {
-        return priceList;
-    }
+//    public Map<Taxes, Double> getPriceList() {
+//        return priceList;
+//    }
 
     public Map<ExchangeRate, Double> getExchangeRates() {
         return exchangeRates;

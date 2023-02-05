@@ -7,7 +7,6 @@ import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTran
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
 import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
-import eu.deltasource.internship.abankingsystem.model.BankInstitution;
 import eu.deltasource.internship.abankingsystem.model.Transaction;
 import eu.deltasource.internship.abankingsystem.repository.bankAccountRepository.BankAccountRepository;
 import eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepository.BankInstitutionRepository;
@@ -134,8 +133,13 @@ public class TransactionServiceImpl implements TransactionService {
 
         var source = fromAccount.getAmountAvailable();
         var target = toAccount.getAmountAvailable();
+
+//		var sourceAccountsBank = bankInstitutionRepository.getBank(fromAccount).getPriceList();
+		var sourceAccountsBank = bankInstitutionRepository.getBank(fromAccount);
+
         double amountAfterExchange = exchangeRate(fromAccount, fromAccount.getCurrency()) * depositAmount;
-        double amountAndTaxes = amountAfterExchange + taxes(fromAccount, taxRate);
+//        double amountAndTaxes = amountAfterExchange + taxes(fromAccount, taxRate);
+        double amountAndTaxes = amountAfterExchange + bankInstitutionRepository.getTaxMap(sourceAccountsBank).get(taxRate);
         if (Objects.equals(fromAccount.getIban(), toAccount.getIban())) {
             throw new IllegalArgumentException("IBANs are the same!");
         }
@@ -153,7 +157,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         var amountAvailable = bankAccount.getAmountAvailable();
         double amountAfterExchange = exchangeRate(bankAccount, depositCurrency) * depositAmount;
-        double res = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
+//        double res = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
+        double res = amountAfterExchange + bankInstitutionRepository.getTaxMap(bankInstitutionRepository.getBank(bankAccount)).get(Taxes.TAX_TO_THE_SAME_BANK);
         bankAccount.setAmountAvailable(amountAvailable + res);
         makeTransactionForDepositOrWithdraw(bankAccount, depositAmount, "Deposit");
     }
@@ -163,7 +168,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         var amountAvailable = bankAccount.getAmountAvailable();
         double amountAfterExchange = exchangeRate(bankAccount, bankAccount.getCurrency()) * withdrawAmount;
-        Double finaTrans = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
+//        Double finaTrans = amountAfterExchange + taxes(bankAccount, Taxes.TAX_TO_THE_SAME_BANK);
+        Double finaTrans = amountAfterExchange + bankInstitutionRepository.getTaxMap(bankInstitutionRepository.getBank(bankAccount)).get(Taxes.TAX_TO_THE_SAME_BANK);
         if (finaTrans.compareTo(amountAvailable) > 0) {
             throw new InsufficientAmountWithdrawException("Insufficient amount to withdraw!");
         }
@@ -171,17 +177,23 @@ public class TransactionServiceImpl implements TransactionService {
         makeTransactionForDepositOrWithdraw(bankAccount, withdrawAmount, "Withdraw");
     }
 
-    /**
-     * Fetch the taxes of the Bank whose account is making the operation.
-     *
-     * @param bankTaxes - Type of Tax to calculate
-     */
-    private double taxes(BankAccount bankAccount, Taxes bankTaxes) {
-
-        // Get the bank that is assigned to account through map
-        BankInstitution accountBank = bankInstitutionRepository.getBank(bankAccount);
-        return accountBank.getPriceList().get(bankTaxes);
-    }
+//    /**
+//     * Fetch the taxes of the Bank whose account is making the operation.
+//     *
+//     * @param bankTaxes - Type of Tax to calculate
+//     */
+//    private double taxes(BankAccount bankAccount, Taxes bankTaxes) {
+//
+//        // Get the bank that is assigned to account through map
+//        BankInstitution accountBank = bankInstitutionRepository.getBank(bankAccount);
+////		bankInstitutionRepository.addTaxToBankMap(accountBank, bankTaxes);
+//
+////		return bankInstitutionRepository.getTaxByBank(accountBank, bankTaxes);
+//		return bankInstitutionRepository.getTaxMap(accountBank);
+////		return bankInstitutionRepository.getTaxByTax(bankTaxes);
+//
+////        return accountBank.getPriceList().get(bankTaxes);
+//    }
 
     /**
      * Fetch exchange rates

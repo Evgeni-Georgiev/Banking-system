@@ -1,7 +1,11 @@
 package eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepository;
 
+import eu.deltasource.internship.abankingsystem.enums.Taxes;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
+
+import java.util.List;
+import java.util.Map;
 
 public interface BankInstitutionRepository {
 
@@ -20,6 +24,7 @@ public interface BankInstitutionRepository {
      */
     BankInstitution getBankById(int id);
 
+
     /**
      * Assign bank to account.
      *
@@ -35,5 +40,25 @@ public interface BankInstitutionRepository {
      * @return bank assigned to certain bank
      */
     BankInstitution getBank(BankAccount bankAccount);
+
+//    Map<Taxes, Double> getPriceList();
+
+//    void addPriceListToMap(Taxes taxes, Double prices);
+
+//    Double getPriceList(Taxes taxes);
+
+	void addTaxToBankMap(BankInstitution bank, Map<Taxes, Double> taxMap);
+
+	Map<Taxes, Double> getTaxMap(BankInstitution bank);
+
+	Double getTaxByTax(Taxes taxes);
+
+	Double getTaxByBank(BankInstitution bank, Taxes taxes);
+
+	Map<Taxes, Double> findTaxesByBank(BankInstitution bank);
+
+	void filterAndAddTaxesToBank(BankInstitution bank, Map<Taxes, Double> taxes, List<Taxes> taxesToAdd);
+
+//	BankAccount getAccountListedToBank(BankInstitution bankInstitution);
 
 }

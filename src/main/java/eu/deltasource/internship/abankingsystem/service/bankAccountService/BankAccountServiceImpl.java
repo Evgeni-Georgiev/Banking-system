@@ -11,6 +11,8 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     private final BankAccountRepository bankAccountRepository;
 
+//	private final BankInstitutionRepository bankInstitution;
+
     public BankAccountServiceImpl(BankAccountRepository bankAccountRepository) {
         this.bankAccountRepository = bankAccountRepository;
     }
@@ -25,6 +27,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         }
         // Add new account to the map(db) of it's repository
         bankAccountRepository.addBankAccountToMap(newAccount);
+//		bankInstitution.addAccountToBank(newAccount);
     }
 
     @Override

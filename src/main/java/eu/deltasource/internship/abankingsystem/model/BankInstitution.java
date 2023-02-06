@@ -13,10 +13,6 @@ public class BankInstitution {
 
     private final String address;
 
-//    private final List<Owner> customers = new ArrayList<>();
-
-//    private final Map<Taxes, Double> priceList; // (that describes all taxes and fees and all currency exchange rates)
-
     private final Map<ExchangeRate, Double> exchangeRates;
 
     private final List<BankAccount> bankAccounts = new ArrayList<>();
@@ -36,14 +32,6 @@ public class BankInstitution {
     public String getAddress() {
         return address;
     }
-
-//    public List<Owner> getCustomers() {
-//        return customers;
-//    }
-
-//    public Map<Taxes, Double> getPriceList() {
-//        return priceList;
-//    }
 
     public Map<ExchangeRate, Double> getExchangeRates() {
         return exchangeRates;
@@ -71,15 +59,9 @@ public class BankInstitution {
         return String.format("%nBank Details: %n " +
                 "Name: %s %n " +
                 "Address: %s %n " +
-//                "Customers: %s %n " +
-//                "Taxes: %s %n " +
-//                "Exchange rates available: %s %n " +
             getName(),
             getName(),
             getAddress()
-//            getCustomers().size(),
-//            getPriceList(),
-//            getExchangeRates()
         );
     }
 }

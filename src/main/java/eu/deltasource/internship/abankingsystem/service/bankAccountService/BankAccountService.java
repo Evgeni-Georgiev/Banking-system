@@ -17,5 +17,11 @@ public interface BankAccountService {
      */
     void createBankAccount(Owner owner, String iban, Currency currency, double amountAvailable, char accountKey);
 
+    /**
+     * Get existing Bank Account by it's Iban
+     *
+     * @param iban
+     * @return
+     */
     BankAccount getBankAccountByIban(String iban);
 }

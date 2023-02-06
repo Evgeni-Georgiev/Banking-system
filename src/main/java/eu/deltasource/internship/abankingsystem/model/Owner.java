@@ -6,10 +6,6 @@ public class Owner {
 
     private final String name;
 
-//    private final List<BankAccount> ownerAccountCount = new ArrayList<>();
-
-//    private final List<BankAccount> bankAccounts = new ArrayList<>();
-
     public Owner(String name) {
         this.name = name;
     }
@@ -18,19 +14,6 @@ public class Owner {
         this.id = id;
         this.name = name;
     }
-
-//    public List<BankAccount> getOwnerAccountCount() {
-//        return unmodifiableList(ownerAccountCount);
-//    }
-
-
-//    public void addAccountToOwner(final BankAccount bankAccount) {
-//        bankAccounts.add(bankAccount);
-//    }
-//
-//    public List<BankAccount> getBankAccounts() {
-//        return unmodifiableList(bankAccounts);
-//    }
 
     public String getName() {
         return name;

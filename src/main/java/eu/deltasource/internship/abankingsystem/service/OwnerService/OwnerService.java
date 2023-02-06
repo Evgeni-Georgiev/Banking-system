@@ -9,6 +9,9 @@ public interface OwnerService {
      */
     void createOwner(String name);
 
+    /**
+     * Get created Owner by Id
+     */
     Owner getOwnerById(int id);
 
 }

@@ -33,95 +33,19 @@ public class TransactionServiceImpl implements TransactionService {
         this.bankAccountRepository = bankAccountRepository;
     }
 
-    /**
-     * Method for automatically adding count of days to date.
-     *
-     * @param dayCount - get the number of days to count further from
-     * @return - the date plus number of days(dayCount) further.
-     */
-    private LocalDate processLocalDate(int dayCount) {
-        LocalDate time = LocalDate.now();
-        return time.plusDays(dayCount);
-    }
+    @Override
+    public void transfer(BankAccount fromAccount, BankAccount toAccount, double depositAmount) {
 
-    /**
-     * Method for creating transactions for transferring amount between amount and setting all details to it.
-     *
-     * @param fromAccount     - account transferring the amount
-     * @param toAccount       - account receiving the amount
-     * @param amount          - request account transaction
-     * @param transactionType - Type of operation [transfer(between accounts), withdraw, deposit)]
-     */
-    private void makeTransactionTransfer(BankAccount fromAccount, BankAccount toAccount, double amount, String transactionType) {
-
-        var dayCount = bankInstitutionRepository.getBank(fromAccount).getDayCountTime();
-        Transaction transaction = new Transaction.TransactionBuilder(
-            fromAccount,
-            bankInstitutionRepository.getBank(fromAccount),
-            amount,
-            fromAccount.getCurrency(),
-            processLocalDate(dayCount))
-            .setTargetAccount(toAccount)
-            .setTargetBank(bankInstitutionRepository.getBank(toAccount))
-            .setTargetCurrency(toAccount.getCurrency())
-            .build();
-        transaction.setTransactionType(transactionType);
-        bankAccountRepository.addTransaction(transaction);
-        transactionRepository.createTransaction(transaction);
-        dayCount++;
-        bankInstitutionRepository.getBank(fromAccount).setDayCountTime(dayCount);
-    }
-
-    /**
-     * Method for saving the transaction in a statement for keeping history.
-     *
-     * @param bankAccount     - account for making a deposit to account
-     * @param depositAmount   - required amount to deposit
-     * @param TransactionType - set type of operation
-     */
-    private void makeTransactionForDepositOrWithdraw(BankAccount bankAccount, double depositAmount, String TransactionType) {
-
-        // Get the count of days from BankInstitution using map through the account that is assigned to that bank.
-        var dayCount = bankInstitutionRepository.getBank(bankAccount).getDayCountTime();
-        Transaction transaction = new Transaction.TransactionBuilder(
-            bankAccount,
-            bankInstitutionRepository.getBank(bankAccount),
-            depositAmount,
-            bankAccount.getCurrency(),
-            processLocalDate(dayCount))
-            .build();
-        transaction.setTransactionType(TransactionType);
-        bankAccountRepository.addTransaction(transaction);
-        transactionRepository.createTransaction(transaction);
-        dayCount++;
-        bankInstitutionRepository.getBank(bankAccount).setDayCountTime(dayCount);
-    }
-
-    /**
-     * Prepare the amount to be subtracted and added to the corresponding accounts.
-     *
-     * @param fromAccount   - account transferring the amount
-     * @param toAccount     - account receiving the amount
-     * @param depositAmount - requested amount for transfer
-     * @param taxRate       - calculated taxes for the service
-     */
-    private void processTransferRequest(BankAccount fromAccount, BankAccount toAccount, Double depositAmount, Taxes taxRate) {
-
-        var source = fromAccount.getAmountAvailable();
-        var target = toAccount.getAmountAvailable();
-		var sourceAccountsBank = bankInstitutionRepository.getBank(fromAccount);
-        double amountAfterExchange = exchangeRate(fromAccount, fromAccount.getCurrency()) * depositAmount;
-        double amountAndTaxes = amountAfterExchange + bankInstitutionRepository.getTaxMap(sourceAccountsBank).get(taxRate);
-        if (Objects.equals(fromAccount.getIban(), toAccount.getIban())) {
-            throw new DuplicateIbanException("IBANs are the same!");
+        if (fromAccount.getAccountKey() == 'C' && toAccount.getAccountKey() == 'C') {
+            if (bankInstitutionRepository.getBank(fromAccount) == bankInstitutionRepository.getBank(toAccount)) {
+                processTransferRequest(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_THE_SAME_BANK);
+            } else if (bankInstitutionRepository.getBank(fromAccount) != bankInstitutionRepository.getBank(toAccount)) {
+                processTransferRequest(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_DIFFERENT_BANK);
+            }
+            makeTransactionTransfer(fromAccount, toAccount, depositAmount, "Transfer");
+        } else {
+            throw new TransferBetweenNotCurrentAccountsException("Both accounts must be current!");
         }
-        if (amountAndTaxes > source) {
-            throw new InsufficientAmountTransferException("Insufficient amount to transfer!");
-        }
-        source -= amountAndTaxes;
-        target += amountAfterExchange;
-        fromAccount.setAmountAvailable(source);
-        toAccount.setAmountAvailable(target);
     }
 
     @Override
@@ -148,6 +72,86 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     /**
+     * Method for creating transactions for transferring amount between amount and setting all details to it.
+     *
+     * @param fromAccount     account transferring the amount
+     * @param toAccount       account receiving the amount
+     * @param amount          request account transaction
+     * @param transactionType type of operation [transfer(between accounts), withdraw, deposit)]
+     */
+    private void makeTransactionTransfer(BankAccount fromAccount, BankAccount toAccount, double amount, String transactionType) {
+
+        var dayCount = bankInstitutionRepository.getBank(fromAccount).getDayCountTime();
+        Transaction transaction = new Transaction.TransactionBuilder(
+            fromAccount,
+            bankInstitutionRepository.getBank(fromAccount),
+            amount,
+            fromAccount.getCurrency(),
+            processLocalDate(dayCount))
+            .setTargetAccount(toAccount)
+            .setTargetBank(bankInstitutionRepository.getBank(toAccount))
+            .setTargetCurrency(toAccount.getCurrency())
+            .build();
+        transaction.setTransactionType(transactionType);
+        bankAccountRepository.addTransaction(transaction);
+        transactionRepository.createTransaction(transaction);
+        dayCount++;
+        bankInstitutionRepository.getBank(fromAccount).setDayCountTime(dayCount);
+    }
+
+    /**
+     * Method for saving the transaction in a statement for keeping history.
+     *
+     * @param bankAccount     account for making a deposit to account
+     * @param depositAmount   required amount to deposit
+     * @param TransactionType set type of operation
+     */
+    private void makeTransactionForDepositOrWithdraw(BankAccount bankAccount, double depositAmount, String TransactionType) {
+
+        // Get the count of days from BankInstitution using map through the account that is assigned to that bank.
+        var dayCount = bankInstitutionRepository.getBank(bankAccount).getDayCountTime();
+        Transaction transaction = new Transaction.TransactionBuilder(
+            bankAccount,
+            bankInstitutionRepository.getBank(bankAccount),
+            depositAmount,
+            bankAccount.getCurrency(),
+            processLocalDate(dayCount))
+            .build();
+        transaction.setTransactionType(TransactionType);
+        bankAccountRepository.addTransaction(transaction);
+        transactionRepository.createTransaction(transaction);
+        dayCount++;
+        bankInstitutionRepository.getBank(bankAccount).setDayCountTime(dayCount);
+    }
+
+    /**
+     * Prepare the amount to be subtracted and added to the corresponding accounts.
+     *
+     * @param fromAccount   account transferring the amount
+     * @param toAccount     account receiving the amount
+     * @param depositAmount requested amount for transfer
+     * @param taxRate       calculated taxes for the service
+     */
+    private void processTransferRequest(BankAccount fromAccount, BankAccount toAccount, Double depositAmount, Taxes taxRate) {
+
+        var source = fromAccount.getAmountAvailable();
+        var target = toAccount.getAmountAvailable();
+		var sourceAccountsBank = bankInstitutionRepository.getBank(fromAccount);
+        double amountAfterExchange = exchangeRate(fromAccount, fromAccount.getCurrency()) * depositAmount;
+        double amountAndTaxes = amountAfterExchange + bankInstitutionRepository.getTaxMap(sourceAccountsBank).get(taxRate);
+        if (Objects.equals(fromAccount.getIban(), toAccount.getIban())) {
+            throw new DuplicateIbanException("IBANs are the same!");
+        }
+        if (amountAndTaxes > source) {
+            throw new InsufficientAmountTransferException("Insufficient amount to transfer!");
+        }
+        source -= amountAndTaxes;
+        target += amountAfterExchange;
+        fromAccount.setAmountAvailable(source);
+        toAccount.setAmountAvailable(target);
+    }
+
+    /**
      * Fetch exchange rates
      *
      * @param bankAccount
@@ -161,19 +165,15 @@ public class TransactionServiceImpl implements TransactionService {
         return bankExchangeRateMap.get(exchangeRateUpdate);
     }
 
-    @Override
-    public void transfer(BankAccount fromAccount, BankAccount toAccount, double depositAmount) {
-
-        if (fromAccount.getAccountKey() == 'C' && toAccount.getAccountKey() == 'C') {
-            if (bankInstitutionRepository.getBank(fromAccount) == bankInstitutionRepository.getBank(toAccount)) {
-                processTransferRequest(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_THE_SAME_BANK);
-            } else if (bankInstitutionRepository.getBank(fromAccount) != bankInstitutionRepository.getBank(toAccount)) {
-                processTransferRequest(fromAccount, toAccount, depositAmount, Taxes.TAX_TO_DIFFERENT_BANK);
-            }
-            makeTransactionTransfer(fromAccount, toAccount, depositAmount, "Transfer");
-        } else {
-            throw new TransferBetweenNotCurrentAccountsException("Both accounts must be current!");
-        }
+    /**
+     * Method for automatically adding count of days to date.
+     *
+     * @param dayCount get the number of days to count further from
+     * @return the date plus number of days(dayCount) further.
+     */
+    private LocalDate processLocalDate(int dayCount) {
+        LocalDate time = LocalDate.now();
+        return time.plusDays(dayCount);
     }
 
 }

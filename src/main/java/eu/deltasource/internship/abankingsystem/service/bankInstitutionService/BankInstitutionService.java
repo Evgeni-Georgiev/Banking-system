@@ -16,6 +16,13 @@ public interface BankInstitutionService {
      */
     void createBankInstitution(String name, String address, Map<ExchangeRate, Double> exchangeRate);
 
+
+    /**
+     * Get existing BankInstitution by it's id
+     *
+     * @param id
+     * @return
+     */
     BankInstitution getBankInstitutionById(int id);
 
 }

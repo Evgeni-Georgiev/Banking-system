@@ -33,14 +33,14 @@ class BankAccountServiceImplTest {
 
 
     @Test
-    void createAccount() {
+    void Should_createCurrentAccount_When_ValidData() {
         Owner from = new Owner("John");
         classUnderTest.createBankAccount(new Owner("John"), "iban2", Currency.EUR, 15, 'C');
         Assertions.assertEquals("John", from.getName());
     }
 
     @Test
-    void createAccountSavings() {
+    void Should_createSavingsAccount_When_ValidData() {
         Owner from = new Owner("John");
         classUnderTest.createBankAccount(new Owner("John"), "iban2", Currency.EUR, 15, 'S');
         Assertions.assertEquals("John", from.getName());

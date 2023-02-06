@@ -48,7 +48,7 @@ class BankInstitutionServiceImplTest {
     }
 
     @Test
-    void createBank() {
+    void Should_createBank_When_ValidData() {
         String name = "DSK";
         classUnderTest.createBankInstitution(name, "addressNumber", getExchangeRate());
         Assertions.assertEquals("DSK", name);

@@ -74,7 +74,6 @@ public class Application {
         ownerRepository.addOwnerToMap(kilian);
 
         // Create BankInstitution
-
 		bankInstitutionService.createBankInstitution("DSK", "NY 10001", exchangeRates);
 		bankInstitutionService.createBankInstitution("Raiffeisen", "London EC3V 9EL", exchangeRates);
 
@@ -102,27 +101,11 @@ public class Application {
 		taxMap2.put(Taxes.TAX_TO_DIFFERENT_BANK, 1.05);
 		bankInstitutionRepository.addTaxToBankMap(raiffeisen, taxMap2);
 
-		Map<Taxes, Double> retrievedTaxMap1 = bankInstitutionRepository.getTaxMap(dsk);
-		Map<Taxes, Double> retrievedTaxMap2 = bankInstitutionRepository.getTaxMap(raiffeisen);
-
-//		System.out.println(retrievedTaxMap1);
-//		System.out.println(retrievedTaxMap2);
-
-//		System.out.println(dsk);
-//		System.out.println(raiffeisen);
-
 		List<Taxes> taxesToAdd1 = List.of(Taxes.TAX_TO_THE_SAME_BANK, Taxes.TAX_TO_DIFFERENT_BANK);
 		List<Taxes> taxesToAdd2 = List.of(Taxes.TAX_TO_THE_SAME_BANK, Taxes.TAX_TO_DIFFERENT_BANK);
 
 		bankInstitutionRepository.filterAndAddTaxesToBank(dsk, taxMap1, taxesToAdd1);
 		bankInstitutionRepository.filterAndAddTaxesToBank(raiffeisen, taxMap2, taxesToAdd2);
-
-		Map<Taxes, Double> bank1Taxes = bankInstitutionRepository.getTaxMap(dsk);
-		Map<Taxes, Double> bank2Taxes = bankInstitutionRepository.getTaxMap(raiffeisen);
-
-		System.out.println("Taxes for Bank 1: " + bank1Taxes);
-		System.out.println("Taxes for Bank 2: " + bank2Taxes);
-
 
 		// Get account by IBAN
         BankAccount bankAccount1 = bankAccountService.getBankAccountByIban("GB15Z202150876987676");
@@ -155,7 +138,7 @@ public class Application {
         transactionService.transfer(bankAccount3, bankAccount1, 10.0);
         transactionService.transfer(bankAccount3, bankAccount2, 10.0);
         transactionService.transfer(bankAccount2, bankAccount3, 10.0);
-        System.out.println("After transfer: " + bankAccount2.getAmountAvailable());
+        System.out.println("After transfer: " + String.format("%.2f", bankAccount2.getAmountAvailable()));
         System.out.println("After transfer of source account: " + bankAccount1.getAmountAvailable());
         System.out.println("After transfer of source account: " + bankAccount2.getAmountAvailable());
 

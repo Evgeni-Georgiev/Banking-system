@@ -16,30 +16,14 @@ public abstract class BankAccount {
 
     private final char accountKey;
 
-//    private List<Transaction> transferStatement;
-
-//    private static final List<BankAccount> accounts = new ArrayList<>();
-
     public BankAccount(Owner owner, String iban, Currency currency, double amountAvailable, char accountKey) {
         this.owner = owner;
         this.iban = normalizeIban(iban);
         this.currency = currency;
         this.amountAvailable = amountAvailable;
         this.accountKey = normalizeAccountKey(accountKey);
-//        this.transferStatement = new LinkedList<>();
-//        accounts.add(this);
         addAccountCount(this);
     }
-
-//    public static void countOfAccountOwnerHas(Owner owner) {
-//        List<BankAccount> newListOwner = new ArrayList<>();
-//        for (var singleAccount : accounts) {
-//            if (singleAccount.getOwner().getName().equals(owner.getName())) {
-//                newListOwner.add(singleAccount);
-//            }
-//        }
-//        System.out.println(newListOwner);
-//    }
 
     public Owner getOwner() {
         return owner;
@@ -75,26 +59,6 @@ public abstract class BankAccount {
         this.amountAvailable = amountAvailable;
     }
 
-//    public List<Transaction> getTransferStatement() {
-//        return unmodifiableList(transferStatement);
-////        return transferStatement;
-//    }
-
-//    public void setTransferStatement(List<Transaction> transferStatement) {
-//        this.transferStatement = transferStatement;
-//    }
-//
-//    public void addTransaction(Transaction transaction) {
-//        transferStatement.add(transaction);
-//    }
-
-//    public List<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate) {
-//        return transferStatement.stream().filter(currentTransaction -> {
-//            final LocalDate transactionDate = currentTransaction.getTimestamp();
-//            return !transactionDate.isBefore(startDate) && !transactionDate.isAfter(endDate);
-//        }).toList();
-//    }
-
     @Override
     public String toString() {
         return String.format(
@@ -102,7 +66,7 @@ public abstract class BankAccount {
                 "Owner: %s %n " +
                 "IBAN: %s %n " +
                 "Currency: %s %n " +
-                "Amount Available: %s %n " +
+                "Amount Available: %.2f %n " +
                 "Account Key: %s %n " +
                 "Account Type: %s %n ",
             getOwner().getName(),

@@ -31,7 +31,7 @@ class OwnerServiceImplTest {
     OwnerServiceImpl classUnderTest;
 
     @Test
-    void createOwnerTest() {
+    void Should_createOwner_When_ValidData() {
         String name = "Simon";
         Owner owner = new Owner(name);
         classUnderTest.createOwner(owner.getName());

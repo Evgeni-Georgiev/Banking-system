@@ -11,56 +11,16 @@ import java.util.stream.Collectors;
 
 public class BankInstitutionRepositoryImpl implements BankInstitutionRepository {
 
-    private final Map<Integer, BankInstitution> bankInstitutionMap = new HashMap<>();
+    final Map<Integer, BankInstitution> bankInstitutionMap = new HashMap<>();
 
-    private Map<Taxes, Double> priceList = new HashMap<>();
+    Map<Taxes, Double> priceList = new HashMap<>();
 
-	private Map<BankInstitution, Map<Taxes, Double>> bankTaxMap = new HashMap<>();
-
-//    private final List<BankAccount> bankAccounts = new ArrayList<>();
-
-//	private final Map<BankInstitution, BankAccount> listOfBankAccountForBank = new HashMap<>();
-
-//	@Override
-//	public BankAccount getAccountListedToBank(BankInstitution bankInstitution) {
-//		return listOfBankAccountForBank.get(bankInstitution);
-//	}
-
-//	public void addBankAccount(BankAccount bankAccount) {
-//		bankAccounts.add(bankAccount);
-//	}
-
-//    @Override
-//    public void addPriceListToMap(Taxes taxes, Double prices) {
-//        priceList.put(taxes, prices);
-//    }
-
-//    @Override
-//    public Double getPriceList(Taxes taxes) {
-//        return priceList.get(taxes);
-//    }
-
-//    @Override
-//    public Map<Taxes, Double> getPriceList() {
-////        return priceList.values().stream().filter(pl ->
-////            pl.getBankAccounts().contains(bankAccount)
-////        ).findAny().orElse(null);
-//
-//        return null;
-//    }
-
-//    @Override
-//    public void addPriceList(Taxes taxes, Double priceTax) {
-//        priceList.put(taxes, priceTax);
-//    }
+	Map<BankInstitution, Map<Taxes, Double>> bankTaxMap = new HashMap<>();
 
     private int idCounter = 1;
 
     @Override
     public void addBankToMap(final BankInstitution bankInstitution) {
-        // Cannot create new instance of bank inside this method:
-        // new BankInstitution() cannot happen since
-        // => final BankInstitution bankInstitution
         if(bankInstitution != null) {
             bankInstitutionMap.put(idCounter, bankInstitution);
             idCounter++;
@@ -96,12 +56,6 @@ public class BankInstitutionRepositoryImpl implements BankInstitutionRepository 
 		return priceList.get(taxes);
 	}
 
-//	public Map<Taxes, Double> filterTaxes(BankInstitution bank, double threshold) {
-//		return getTaxMap(bank).entrySet().stream()
-//			.filter(entry -> entry.getValue() >= threshold)
-//			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-//	}
-
 	@Override
 	public Map<Taxes, Double> findTaxesByBank(BankInstitution bank) {
 		return bankTaxMap.getOrDefault(bank, new HashMap<>());
@@ -124,9 +78,9 @@ public class BankInstitutionRepositoryImpl implements BankInstitutionRepository 
         return bankInstitutionMap.get(id);
     }
 
-    private static BankInstitutionRepository instance = null;
+    private static BankInstitutionRepositoryImpl instance = null;
 
-    public static BankInstitutionRepository getInstance() {
+    public static BankInstitutionRepositoryImpl getInstance() {
         if (instance == null) {
             instance = new BankInstitutionRepositoryImpl();
         }

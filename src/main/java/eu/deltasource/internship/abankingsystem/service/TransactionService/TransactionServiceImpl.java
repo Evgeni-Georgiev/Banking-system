@@ -3,6 +3,7 @@ package eu.deltasource.internship.abankingsystem.service.TransactionService;
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 import eu.deltasource.internship.abankingsystem.enums.Taxes;
+import eu.deltasource.internship.abankingsystem.exception.DuplicateIbanException;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountTransferException;
 import eu.deltasource.internship.abankingsystem.exception.InsufficientAmountWithdrawException;
 import eu.deltasource.internship.abankingsystem.exception.TransferBetweenNotCurrentAccountsException;
@@ -49,9 +50,9 @@ public class TransactionServiceImpl implements TransactionService {
      * @param fromAccount     - account transferring the amount
      * @param toAccount       - account receiving the amount
      * @param amount          - request account transaction
-     * @param TransactionType - Type of operation [transfer(between accounts), withdraw, deposit)]
+     * @param transactionType - Type of operation [transfer(between accounts), withdraw, deposit)]
      */
-    private void makeTransactionTransfer(BankAccount fromAccount, BankAccount toAccount, double amount, String TransactionType) {
+    private void makeTransactionTransfer(BankAccount fromAccount, BankAccount toAccount, double amount, String transactionType) {
 
         var dayCount = bankInstitutionRepository.getBank(fromAccount).getDayCountTime();
         Transaction transaction = new Transaction.TransactionBuilder(
@@ -64,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
             .setTargetBank(bankInstitutionRepository.getBank(toAccount))
             .setTargetCurrency(toAccount.getCurrency())
             .build();
-        transaction.setTransactionType(TransactionType);
+        transaction.setTransactionType(transactionType);
         bankAccountRepository.addTransaction(transaction);
         transactionRepository.createTransaction(transaction);
         dayCount++;
@@ -112,7 +113,7 @@ public class TransactionServiceImpl implements TransactionService {
         double amountAfterExchange = exchangeRate(fromAccount, fromAccount.getCurrency()) * depositAmount;
         double amountAndTaxes = amountAfterExchange + bankInstitutionRepository.getTaxMap(sourceAccountsBank).get(taxRate);
         if (Objects.equals(fromAccount.getIban(), toAccount.getIban())) {
-            throw new IllegalArgumentException("IBANs are the same!");
+            throw new DuplicateIbanException("IBANs are the same!");
         }
         if (amountAndTaxes > source) {
             throw new InsufficientAmountTransferException("Insufficient amount to transfer!");

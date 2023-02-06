@@ -10,15 +10,15 @@ import java.util.Map;
 
 public class OwnerRepositoryImpl implements OwnerRepository {
 
-    private final Map<Integer, Owner> ownerMap = new HashMap<>();
+    final Map<Integer, Owner> ownerMap = new HashMap<>();
 
-    private final List<BankAccount> bankAccounts = new ArrayList<>();
+    final List<BankAccount> bankAccounts = new ArrayList<>();
 
-    private int idCounter = 1;
+    int idCounter = 1;
 
-    private static OwnerRepository instance = null;
+    static OwnerRepositoryImpl instance = null;
 
-    public static OwnerRepository getInstance() {
+    public static OwnerRepositoryImpl getInstance() {
         if (instance == null) {
             instance = new OwnerRepositoryImpl();
         }
@@ -32,28 +32,22 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     public void addOwnerToMap(final Owner owner) {
         if(owner != null) {
             ownerMap.put(idCounter, owner);
-//            bankAccounts.addAll(owner.getBankAccounts());
             idCounter++;
         }
     }
 
     @Override
     public void addAccountToOwner(Owner owner, BankAccount bankAccount) {
-//        owner.addAccountToOwner(bankAccount);
         bankAccounts.add(bankAccount);
     }
 
     @Override
-    public Owner getOwner(BankAccount bankAccount) { // PLACE NOT IN THIS REPO
-//        return ownerMap.values().stream().filter(owner ->
-//            owner.getBankAccounts().contains(bankAccount)
-//        ).findAny().orElse(null);
+    public Owner getOwner(BankAccount bankAccount) {
         return bankAccounts.stream()
             .filter(ba -> ba.equals(bankAccount))
             .map(BankAccount::getOwner)
             .findAny()
             .orElse(null);
-
     }
 
     @Override

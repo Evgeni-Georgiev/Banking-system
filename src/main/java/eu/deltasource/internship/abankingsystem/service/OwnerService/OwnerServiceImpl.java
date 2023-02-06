@@ -3,11 +3,11 @@ package eu.deltasource.internship.abankingsystem.service.OwnerService;
 import eu.deltasource.internship.abankingsystem.model.Owner;
 import eu.deltasource.internship.abankingsystem.repository.ownerRepository.OwnerRepository;
 
-public class OwnerImpl implements OwnerService{
+public class OwnerServiceImpl implements OwnerService{
 
     private final OwnerRepository ownerRepository;
 
-    public OwnerImpl(OwnerRepository ownerRepository) {
+    public OwnerServiceImpl(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
     }
 

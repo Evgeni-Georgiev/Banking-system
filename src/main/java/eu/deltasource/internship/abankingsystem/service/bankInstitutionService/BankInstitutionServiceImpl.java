@@ -6,22 +6,17 @@ import eu.deltasource.internship.abankingsystem.repository.bankInstitutionReposi
 
 import java.util.Map;
 
-public class BankInstitutionImpl implements BankInstitutionService {
+public class BankInstitutionServiceImpl implements BankInstitutionService {
 
     private final BankInstitutionRepository bankInstitutionRepository;
 
-    public BankInstitutionImpl(BankInstitutionRepository bankInstitutionRepository) {
+    public BankInstitutionServiceImpl(BankInstitutionRepository bankInstitutionRepository) {
         this.bankInstitutionRepository = bankInstitutionRepository;
     }
-
-//    public void createExchangeRates(Taxes taxes, Double priceTax) {
-//        bankInstitutionRepository.addPriceList(taxes, priceTax);
-//    }
 
     @Override
     public void createBankInstitution(String name, String address, Map<ExchangeRate, Double> exchangeRate) {
         BankInstitution newBankInstitution = new BankInstitution(name, address, exchangeRate);
-//		bankInstitutionRepository.addTaxToBankMap(newBankInstitution);
         bankInstitutionRepository.addBankToMap(newBankInstitution);
     }
 

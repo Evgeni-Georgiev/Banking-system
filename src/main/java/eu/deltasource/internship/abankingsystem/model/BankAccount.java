@@ -97,21 +97,20 @@ public abstract class BankAccount {
 
     @Override
     public String toString() {
-        return String.format("%nBank Account Details: %n " +
+        return String.format(
+                "%nBank Account Details: %n " +
                 "Owner: %s %n " +
                 "IBAN: %s %n " +
                 "Currency: %s %n " +
                 "Amount Available: %s %n " +
                 "Account Key: %s %n " +
-                "Account Type: %s %n " +
-                "All Transactions for this account: ",
+                "Account Type: %s %n ",
             getOwner().getName(),
             getIban(),
             getCurrency(),
             getAmountAvailable(),
             getAccountKey(),
             getAccountType()
-//            transferStatement
         );
     }
 

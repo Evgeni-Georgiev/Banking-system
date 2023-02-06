@@ -14,14 +14,14 @@ import eu.deltasource.internship.abankingsystem.repository.ownerRepository.Owner
 import eu.deltasource.internship.abankingsystem.repository.ownerRepository.OwnerRepositoryImpl;
 import eu.deltasource.internship.abankingsystem.repository.transactionRepository.TransactionRepository;
 import eu.deltasource.internship.abankingsystem.repository.transactionRepository.TransactionRepositoryImpl;
-import eu.deltasource.internship.abankingsystem.service.OwnerService.OwnerImpl;
 import eu.deltasource.internship.abankingsystem.service.OwnerService.OwnerService;
+import eu.deltasource.internship.abankingsystem.service.OwnerService.OwnerServiceImpl;
 import eu.deltasource.internship.abankingsystem.service.TransactionService.TransactionService;
 import eu.deltasource.internship.abankingsystem.service.TransactionService.TransactionServiceImpl;
 import eu.deltasource.internship.abankingsystem.service.bankAccountService.BankAccountService;
 import eu.deltasource.internship.abankingsystem.service.bankAccountService.BankAccountServiceImpl;
-import eu.deltasource.internship.abankingsystem.service.bankInstitutionService.BankInstitutionImpl;
 import eu.deltasource.internship.abankingsystem.service.bankInstitutionService.BankInstitutionService;
+import eu.deltasource.internship.abankingsystem.service.bankInstitutionService.BankInstitutionServiceImpl;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -35,10 +35,10 @@ public class Application {
     public static void main(String[] args) {
 
         OwnerRepository ownerRepository = OwnerRepositoryImpl.getInstance();
-        OwnerService ownerService = new OwnerImpl(ownerRepository);
+        OwnerService ownerService = new OwnerServiceImpl(ownerRepository);
 
         BankInstitutionRepository bankInstitutionRepository = BankInstitutionRepositoryImpl.getInstance();
-        BankInstitutionService bankInstitutionService = new BankInstitutionImpl(bankInstitutionRepository);
+        BankInstitutionService bankInstitutionService = new BankInstitutionServiceImpl(bankInstitutionRepository);
 
         BankAccountRepository bankAccountRepository = BankAccountRepositoryImpl.getInstance();
         BankAccountService bankAccountService = new BankAccountServiceImpl(bankAccountRepository);
@@ -184,8 +184,6 @@ public class Application {
         System.out.println(ownerRepository.getOwner(bankAccount1));
 
         countOfAccountOwnerHas(simon);
-
-		System.out.println("DSK has theres accounts: ");
 
 	}
 }

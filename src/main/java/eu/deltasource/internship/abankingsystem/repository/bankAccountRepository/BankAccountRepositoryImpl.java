@@ -9,13 +9,13 @@ import java.util.*;
 
 public class BankAccountRepositoryImpl implements BankAccountRepository {
 
-    private final Map<String, BankAccount> bankAccountMap = new HashMap<>();
+    final Map<String, BankAccount> bankAccountMap = new HashMap<>();
 
-    private static final List<BankAccount> accounts = new ArrayList<>();
+    static final List<BankAccount> accounts = new ArrayList<>();
 
-    private final List<Transaction> transferStatement = new LinkedList<>();
+    final List<Transaction> transferStatement = new LinkedList<>();
 
-    private static BankAccountRepository instance = null;
+    static BankAccountRepositoryImpl instance = null;
 
     public static void addAccountCount(BankAccount bankAccount) {
         accounts.add(bankAccount);
@@ -55,7 +55,7 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
     }
 
     @Override
-    public void addBankAccountToMap(final BankAccount bankAccount) {
+    public void addBankAccountToMap(final BankAccount bankAccount) { // to not override the reference in the method
         if (bankAccount != null) {
             bankAccountMap.put(bankAccount.getIban(), bankAccount);
         }
@@ -68,7 +68,7 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
 
     private BankAccountRepositoryImpl() {}
 
-    public static BankAccountRepository getInstance() {
+    public static BankAccountRepositoryImpl getInstance() {
         if (instance == null) {
             instance = new BankAccountRepositoryImpl();
         }

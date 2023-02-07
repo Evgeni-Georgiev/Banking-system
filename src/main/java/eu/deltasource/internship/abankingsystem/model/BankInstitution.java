@@ -3,9 +3,10 @@ package eu.deltasource.internship.abankingsystem.model;
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Collections.unmodifiableList;
 
 public class BankInstitution {
 
@@ -50,7 +51,7 @@ public class BankInstitution {
     }
 
     public List<BankAccount> getBankAccounts() {
-        return Collections.unmodifiableList(bankAccounts);
+        return unmodifiableList(bankAccounts);
     }
 
 

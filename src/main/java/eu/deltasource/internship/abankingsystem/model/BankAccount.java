@@ -4,7 +4,7 @@ import eu.deltasource.internship.abankingsystem.enums.Currency;
 
 import static eu.deltasource.internship.abankingsystem.repository.bankAccountRepository.BankAccountRepositoryImpl.addAccountCount;
 
-public abstract class BankAccount {
+public class BankAccount {
 
     private final Owner owner;
 
@@ -41,7 +41,9 @@ public abstract class BankAccount {
         return amountAvailable;
     }
 
-    protected abstract String getAccountType();
+    protected String getAccountType() {
+        return "Undefined account type";
+    };
 
     public char getAccountKey() {
         return accountKey;
@@ -63,13 +65,13 @@ public abstract class BankAccount {
     public String toString() {
         return String.format(
                 "%nBank Account Details: %n " +
-                "Owner: %s %n " +
+//                "Owner: %s %n " +
                 "IBAN: %s %n " +
                 "Currency: %s %n " +
                 "Amount Available: %.2f %n " +
                 "Account Key: %s %n " +
                 "Account Type: %s %n ",
-            getOwner().getName(),
+//            getOwner().getName(),
             getIban(),
             getCurrency(),
             getAmountAvailable(),

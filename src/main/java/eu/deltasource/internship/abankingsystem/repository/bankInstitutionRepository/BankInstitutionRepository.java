@@ -26,7 +26,7 @@ public interface BankInstitutionRepository {
 
 
     /**
-     * Assign bank to account.
+     * Assign account to bank.
      *
      * @param bankInstitution bank to be assigned to account
      * @param bankAccount account to assign to bank
@@ -41,12 +41,6 @@ public interface BankInstitutionRepository {
      */
     BankInstitution getBank(BankAccount bankAccount);
 
-//    Map<Taxes, Double> getPriceList();
-
-//    void addPriceListToMap(Taxes taxes, Double prices);
-
-//    Double getPriceList(Taxes taxes);
-
 	void addTaxToBankMap(BankInstitution bank, Map<Taxes, Double> taxMap);
 
 	Map<Taxes, Double> getTaxMap(BankInstitution bank);
@@ -58,7 +52,5 @@ public interface BankInstitutionRepository {
 	Map<Taxes, Double> findTaxesByBank(BankInstitution bank);
 
 	void filterAndAddTaxesToBank(BankInstitution bank, Map<Taxes, Double> taxes, List<Taxes> taxesToAdd);
-
-//	BankAccount getAccountListedToBank(BankInstitution bankInstitution);
 
 }

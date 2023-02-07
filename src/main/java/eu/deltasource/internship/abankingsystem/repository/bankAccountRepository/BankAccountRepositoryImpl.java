@@ -7,6 +7,8 @@ import eu.deltasource.internship.abankingsystem.model.Transaction;
 import java.time.LocalDate;
 import java.util.*;
 
+import static java.util.Collections.unmodifiableList;
+
 public class BankAccountRepositoryImpl implements BankAccountRepository {
 
     final Map<String, BankAccount> bankAccountMap = new HashMap<>();
@@ -21,14 +23,14 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
         accounts.add(bankAccount);
     }
 
-    public static void countOfAccountOwnerHas(Owner owner) {
+    public static List<BankAccount> countOfAccountOwnerHas(Owner owner) {
         List<BankAccount> newListOwner = new ArrayList<>();
         for (var singleAccount : accounts) {
             if (singleAccount.getOwner().getName().equals(owner.getName())) {
                 newListOwner.add(singleAccount);
             }
         }
-        System.out.println(newListOwner);
+        return unmodifiableList(newListOwner);
     }
 
     @Override

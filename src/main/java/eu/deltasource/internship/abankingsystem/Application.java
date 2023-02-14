@@ -162,10 +162,10 @@ public class Application {
         System.out.println(bankAccountRepository.getTransferStatementLocal(start, end));
         System.out.println("=============");
 
-        System.out.println(bankAccountRepository.getTransferStatementByAccount(bankAccount2));
+        System.out.println(bankAccountRepository.getTransferStatementByAccount(String.valueOf(Optional.of(bankAccount2.getIban()))));
 
         System.out.println("Simon's all transactions: ");
-        System.out.println(bankAccountRepository.getTransferStatementByAccount(bankAccount2));
+        System.out.println(bankAccountRepository.getTransferStatementByAccount(String.valueOf(Optional.of(bankAccount2.getIban()))));
 
         System.out.println("Simon has accounts: ");
 

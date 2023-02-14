@@ -1,7 +1,9 @@
 package eu.deltasource.internship.abankingsystem.exception;
 
-public class InsufficientAmountWithdrawException extends RuntimeException{
-    public InsufficientAmountWithdrawException (String str) {
-        super(str);
+import eu.deltasource.internship.abankingsystem.enums.MessageTemplate;
+
+public class InsufficientAmountWithdrawException extends RuntimeException {
+    public InsufficientAmountWithdrawException (String message) {
+        super(MessageTemplate.INSUFFICIENT_AMOUNT_TO_WITHDRAW.getMessageTemplate() + message);
     }
 }

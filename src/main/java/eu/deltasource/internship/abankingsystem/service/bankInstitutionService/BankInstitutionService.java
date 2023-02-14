@@ -1,9 +1,10 @@
 package eu.deltasource.internship.abankingsystem.service.bankInstitutionService;
 
-import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
+import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.BankInstitution;
+import eu.deltasource.internship.abankingsystem.model.Owner;
 
-import java.util.Map;
+import java.util.List;
 
 public interface BankInstitutionService {
 
@@ -12,17 +13,21 @@ public interface BankInstitutionService {
      *
      * @param name
      * @param address
-     * @param exchangeRate
      */
-    void createBankInstitution(String name, String address, Map<ExchangeRate, Double> exchangeRate);
+//    void createBankInstitution(String name, String address, Map<ExchangeRate, Double> exchangeRate);
+    void createBankInstitution(String name, String address);
 
 
     /**
-     * Get existing BankInstitution by it's id
+     * Get existing BankInstitution by its id
      *
      * @param id
      * @return
      */
     BankInstitution getBankInstitutionById(int id);
+
+    List<Owner> filterOwnersByBank(BankInstitution bankInstitution);
+
+    List<BankAccount> filterAccountsInBank(BankInstitution bankInstitution);
 
 }

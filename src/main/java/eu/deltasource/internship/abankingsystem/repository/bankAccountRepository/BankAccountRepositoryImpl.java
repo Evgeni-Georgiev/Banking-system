@@ -7,48 +7,39 @@ import eu.deltasource.internship.abankingsystem.model.Transaction;
 import java.time.LocalDate;
 import java.util.*;
 
-import static java.util.Collections.unmodifiableList;
-
 public class BankAccountRepositoryImpl implements BankAccountRepository {
 
     final Map<String, BankAccount> bankAccountMap = new HashMap<>();
 
-    static final List<BankAccount> accounts = new ArrayList<>();
-
     final List<Transaction> transferStatement = new LinkedList<>();
+
+    final List<Owner> allOwners = new ArrayList<>();
 
     static BankAccountRepositoryImpl instance = null;
 
-    public static void addAccountCount(BankAccount bankAccount) {
-        accounts.add(bankAccount);
-    }
-
-    public static List<BankAccount> countOfAccountOwnerHas(Owner owner) {
-        List<BankAccount> newListOwner = new ArrayList<>();
-        for (var singleAccount : accounts) {
-            if (singleAccount.getOwner().getName().equals(owner.getName())) {
-                newListOwner.add(singleAccount);
-            }
-        }
-        return unmodifiableList(newListOwner);
-    }
-
     @Override
-    public List<Transaction> getTransferStatement(BankAccount bankAccount) {
-
+    public List<Transaction> getTransferStatementByAccount(BankAccount bankAccount) {
+        String iban = bankAccount.getIban().orElse("");
         return transferStatement.stream()
-            .filter(currentTransactionStatement -> (currentTransactionStatement.getSourceAccount().equals(bankAccount)
-                || currentTransactionStatement.getTargetAccount() != null && currentTransactionStatement.getTargetAccount().equals(bankAccount))
+            .filter(currentTransactionStatement ->
+                currentTransactionStatement.getSourceAccount().getIban().orElse("").equals(iban)
+                    || (currentTransactionStatement.getTargetAccount() != null
+                    && currentTransactionStatement.getTargetAccount().getIban().orElse("").equals(iban))
             )
             .toList();
     }
 
     @Override
     public List<Transaction> getTransferStatementLocal(LocalDate startDate, LocalDate endDate) {
-        return transferStatement.stream().filter(currentTransaction -> {
-            final LocalDate transactionDate = currentTransaction.getTimestamp();
-            return !transactionDate.isBefore(startDate) && !transactionDate.isAfter(endDate);
-        }).toList();
+        return transferStatement.stream()
+            .filter(currentTransaction -> {
+                return transactionDateRange(startDate, endDate, currentTransaction);
+            }).toList();
+    }
+
+    private boolean transactionDateRange(LocalDate startDate, LocalDate endDate, Transaction currentTransaction) {
+        final LocalDate transactionDate = currentTransaction.getTimestamp();
+        return !transactionDate.isBefore(startDate) && !transactionDate.isAfter(endDate);
     }
 
     @Override
@@ -59,7 +50,9 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
     @Override
     public void addBankAccountToMap(final BankAccount bankAccount) { // to not override the reference in the method
         if (bankAccount != null) {
-            bankAccountMap.put(bankAccount.getIban(), bankAccount);
+            if(bankAccount.getIban().isPresent()) {
+                bankAccountMap.put(bankAccount.getIban().get(), bankAccount);
+            }
         }
     }
 

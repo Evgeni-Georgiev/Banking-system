@@ -14,7 +14,7 @@ public class TransactionRepositoryImpl implements TransactionRepository{
     private int idCounter = 1;
 
     @Override
-    public Transaction getById(final int id) {
+    public Transaction getTransactionById(final int id) {
         return transactionMap.get(id);
     }
 

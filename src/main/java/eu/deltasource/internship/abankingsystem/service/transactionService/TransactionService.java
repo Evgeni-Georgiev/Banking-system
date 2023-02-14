@@ -1,4 +1,4 @@
-package eu.deltasource.internship.abankingsystem.service.TransactionService;
+package eu.deltasource.internship.abankingsystem.service.transactionService;
 
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;

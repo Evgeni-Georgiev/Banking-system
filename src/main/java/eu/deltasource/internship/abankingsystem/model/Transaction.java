@@ -1,6 +1,7 @@
 package eu.deltasource.internship.abankingsystem.model;
 
 import eu.deltasource.internship.abankingsystem.enums.Currency;
+import eu.deltasource.internship.abankingsystem.enums.TransactionType;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class Transaction {
 
     private final Currency targetCurrency;
 
-    private String transactionType;
+    private TransactionType transactionType;
 
     private final LocalDate timestamp;
 
@@ -67,11 +68,11 @@ public class Transaction {
         return targetCurrency;
     }
 
-    public String getTransactionType() {
+    public TransactionType getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(String transactionType) {
+    public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
     }
 
@@ -84,15 +85,15 @@ public class Transaction {
     }
 
     public String operationsStringOutput() {
-        if (Objects.equals(getTransactionType(), "Deposit") || Objects.equals(getTransactionType(), "Withdraw")) {
+        if (Objects.equals(getTransactionType(), TransactionType.DEPOSIT) || Objects.equals(getTransactionType(), TransactionType.WITHDRAW)) {
             return String.format(
                 """
-                    %n Source account: %s(%s)
+                     Source account: %s(%s)
                      Transferred amount: (%s)%,.2f
                      Source currency: %s
                      Transaction type: %s
                      Timestamp: %s %n""",
-                sourceAccount.getIban(),
+                sourceAccount.getIban().get(),
                 getTargetBank().getName(),
                 getSourceCurrency(),
                 getAmount(),
@@ -102,15 +103,17 @@ public class Transaction {
         } else {
             return String.format(
                 """
-                    %n Source account: %s
-                     Target account: %s
+                     Source account: %s(%s)
+                     Target account: %s(%s)
                      Transferred amount: (%s)%,.2f
                      Source currency: %s
                      Target currency: %s
                      Transaction type: %s
                      Timestamp: %s %n""",
-                sourceAccount.getIban(),
-                targetAccount.getIban(),
+                sourceAccount.getIban().get(),
+                getSourceBank().getName(),
+                targetAccount.getIban().get(),
+                getTargetBank().getName(),
                 getSourceCurrency(),
                 getAmount(),
                 getSourceCurrency(),

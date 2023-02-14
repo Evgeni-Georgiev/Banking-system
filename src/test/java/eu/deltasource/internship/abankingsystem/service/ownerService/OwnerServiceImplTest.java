@@ -1,4 +1,4 @@
-package eu.deltasource.internship.abankingsystem.service.OwnerService;
+package eu.deltasource.internship.abankingsystem.service.ownerService;
 
 import eu.deltasource.internship.abankingsystem.model.Owner;
 import eu.deltasource.internship.abankingsystem.repository.bankAccountRepository.BankAccountRepository;

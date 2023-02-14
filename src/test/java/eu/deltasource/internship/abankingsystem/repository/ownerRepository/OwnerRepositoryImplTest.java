@@ -1,6 +1,7 @@
 package eu.deltasource.internship.abankingsystem.repository.ownerRepository;
 
 import eu.deltasource.internship.abankingsystem.accountType.CurrentAccount;
+import eu.deltasource.internship.abankingsystem.enums.AccountType;
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.Owner;
@@ -8,6 +9,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Optional;
 
 class OwnerRepositoryImplTest {
     static OwnerRepositoryImpl classUnderTest; // reference to be used for test. Static is to initialized by the test framework
@@ -21,7 +25,8 @@ class OwnerRepositoryImplTest {
         // create in each test case with @Test and then run the test
     void clearData() {
         classUnderTest.ownerMap.clear();
-        classUnderTest.bankAccounts.clear();
+        classUnderTest.ownerAccountMap.clear();
+//        classUnderTest.bankAccounts.clear();
     }
 
     @Test
@@ -57,20 +62,29 @@ class OwnerRepositoryImplTest {
         // Test if the bank account is added to the owner
         Owner owner = new Owner("John");
         String iban = "iban".toUpperCase();
-        BankAccount bankAccount = new CurrentAccount(owner, iban, Currency.EUR, 200.0, 'C');
-        classUnderTest.addAccountToOwner(owner, bankAccount);
-        Assertions.assertTrue(classUnderTest.bankAccounts.contains(bankAccount));
+        BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+//        classUnderTest.addAccountToOwner(owner, bankAccount);
+        classUnderTest.addOwnerToAccounts(owner, List.of(bankAccount));
+//        Assertions.assertTrue(classUnderTest.bankAccounts.contains(bankAccount));
+        Assertions.assertTrue(classUnderTest.ownerAccountMap.containsValue(List.of(bankAccount)));
     }
 
     @Test
     public void Should_ReturnOwner_When_ValidData() {
         // Test if the correct owner is returned.
-        Owner owner = new Owner("John");
-        String iban = "iban".toUpperCase();
-        BankAccount bankAccount = new CurrentAccount(owner, iban, Currency.EUR, 200.0, 'C');
-        classUnderTest.addAccountToOwner(owner, bankAccount);
-        Owner returnedOwner = classUnderTest.getOwner(bankAccount);
-        Assertions.assertEquals(owner, returnedOwner);
+        Owner owner = new Owner(1, "John");
+//        classUnderTest.addOwnerToMap(owner);
+        classUnderTest.ownerMap.put(1, owner);
+        Owner getOwnerFromMap = classUnderTest.getOwnerById(owner.getId());
+        Assertions.assertEquals(owner.getName(), getOwnerFromMap.getName());
+
+//        Owner owner1 = new Owner(1, "John Doe");
+//
+//        // Test when the owner is not null
+//        classUnderTest.addOwnerToMap(owner1);
+//        Assertions.assertEquals(1, classUnderTest.ownerMap.size());
+//        Assertions.assertEquals(owner1, classUnderTest.ownerMap.get(1));
+
     }
 
     @Test

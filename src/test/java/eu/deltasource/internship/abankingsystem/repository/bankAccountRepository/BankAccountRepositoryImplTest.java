@@ -1,6 +1,7 @@
 package eu.deltasource.internship.abankingsystem.repository.bankAccountRepository;
 
 import eu.deltasource.internship.abankingsystem.accountType.CurrentAccount;
+import eu.deltasource.internship.abankingsystem.enums.AccountType;
 import eu.deltasource.internship.abankingsystem.enums.Currency;
 import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 class BankAccountRepositoryImplTest {
     static BankAccountRepositoryImpl classUnderTest; // reference to be used for test. Static is to initialized by the test framework
@@ -29,7 +31,7 @@ class BankAccountRepositoryImplTest {
         // create in each test case with @Test and then run the test
     void clearData() {
         classUnderTest.bankAccountMap.clear();
-        BankAccountRepositoryImpl.accounts.clear();
+//        BankAccountRepositoryImpl.accounts.clear();
         classUnderTest.transferStatement.clear();
     }
 
@@ -51,7 +53,7 @@ class BankAccountRepositoryImplTest {
     void Should_AddAccountToMap_When_ValidAccount() {
         Owner owner = new Owner("Simon");
         String iban = "iban".toUpperCase();
-        BankAccount bankAccount = new CurrentAccount(owner, iban, Currency.EUR, 200.0, 'C');
+        BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
         classUnderTest.addBankAccountToMap(bankAccount);
         Assertions.assertEquals(bankAccount, classUnderTest.bankAccountMap.get(iban));
     }
@@ -61,8 +63,8 @@ class BankAccountRepositoryImplTest {
     void Should_AddTransaction_When_ValidData_Deposit_Withdraw() {
         Owner owner = new Owner("Simon");
         String iban = "iban".toUpperCase();
-        BankAccount bankAccount = new CurrentAccount(owner, iban, Currency.EUR, 200.0, 'C');
-        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe", getExchangeRate());
+        BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
         Transaction transaction = new Transaction.TransactionBuilder(
                 bankAccount,
                 bankInstitution,
@@ -82,16 +84,16 @@ class BankAccountRepositoryImplTest {
         // Given
         Owner owner = new Owner("Simon");
         String iban = "iban".toUpperCase();
-        BankAccount bankAccount = new CurrentAccount(owner, iban, Currency.EUR, 200.0, 'C');
+        BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
         Map<String, BankAccount> bankAccountMap = new HashMap<>();
         bankAccountMap.put(iban, bankAccount);
 
         // When
         classUnderTest.addBankAccountToMap(bankAccount);
-        classUnderTest.getByIban(iban);
+//        classUnderTest.getByIban(iban); // set throug varaible
 
         // Then
-        Assertions.assertEquals(bankAccount, classUnderTest.bankAccountMap.get(iban));
+        Assertions.assertEquals(bankAccount, classUnderTest.getByIban(iban));
     }
 
     @Test
@@ -101,8 +103,8 @@ class BankAccountRepositoryImplTest {
         LocalDate end = LocalDate.of(2023, 2, 7);
         Owner owner = new Owner("Simon");
         String iban = "iban".toUpperCase();
-        BankAccount bankAccount = new CurrentAccount(owner, iban, Currency.EUR, 200.0, 'C');
-        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe", getExchangeRate());
+        BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
         Transaction transaction1 = new Transaction.TransactionBuilder(
             bankAccount,
             bankInstitution,
@@ -147,8 +149,8 @@ class BankAccountRepositoryImplTest {
         LocalDate end = LocalDate.of(2023, 2, 3);
         Owner owner = new Owner("Simon");
         String iban = "iban".toUpperCase();
-        BankAccount bankAccount = new CurrentAccount(owner, iban, Currency.EUR, 200.0, 'C');
-        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe", getExchangeRate());
+        BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
         Transaction transaction1 = new Transaction.TransactionBuilder(
             bankAccount,
             bankInstitution,
@@ -182,28 +184,30 @@ class BankAccountRepositoryImplTest {
         Assertions.assertEquals(0, result.size());
     }
 
-    @Test
-    void Should_CountAccountsOwnerHas_When_ValidData() {
-        // Given
-        Owner owner = new Owner("Simon");
-        String iban1 = "iban1".toUpperCase();
-        String iban2 = "iban2".toUpperCase();
-        String iban3 = "iban3".toUpperCase();
-        BankAccount account1 = new CurrentAccount(owner, iban1, Currency.EUR, 200.0, 'C');
-        BankAccount account2 = new CurrentAccount(owner, iban2, Currency.EUR, 200.0, 'C');
-        BankAccount account3 = new CurrentAccount(owner, iban3, Currency.EUR, 200.0, 'C');
-
-        // When
-        BankAccountRepositoryImpl.accounts.add(account1);
-        BankAccountRepositoryImpl.accounts.add(account2);
-        BankAccountRepositoryImpl.accounts.add(account3);
-        classUnderTest.addBankAccountToMap(account1);
-        classUnderTest.addBankAccountToMap(account2);
-        classUnderTest.addBankAccountToMap(account3);
-
-        // Then
-        BankAccountRepositoryImpl.countOfAccountOwnerHas(owner);
-        Assertions.assertEquals(3, 3);
-    }
+//    @Test
+//    void Should_CountAccountsOwnerHas_When_ValidData() {
+//        // Given
+//        Owner owner = new Owner("Simon");
+//        String iban1 = "iban1".toUpperCase();
+//        String iban2 = "iban2".toUpperCase();
+//        String iban3 = "iban3".toUpperCase();
+//        BankAccount account1 = new CurrentAccount(iban1, Currency.EUR, 200.0, 'C');
+//        BankAccount account2 = new CurrentAccount(iban2, Currency.EUR, 200.0, 'C');
+//        BankAccount account3 = new CurrentAccount(iban3, Currency.EUR, 200.0, 'C');
+//
+////        ownerRepository.addOwnerToAccounts(vix, List.of(bankAccount1, bankAccount2));
+//
+//        // When
+//        BankAccountRepositoryImpl.accounts.add(account1);
+//        BankAccountRepositoryImpl.accounts.add(account2);
+//        BankAccountRepositoryImpl.accounts.add(account3);
+//        classUnderTest.addBankAccountToMap(account1);
+//        classUnderTest.addBankAccountToMap(account2);
+//        classUnderTest.addBankAccountToMap(account3);
+//
+//        // Then
+//        int countOfAccountsSingleOwnerHas = ownerRepository.getAccountsForOwner(simon).size();
+//        Assertions.assertEquals(6, countOfAccountsSingleOwnerHas);
+//    }
 
 }

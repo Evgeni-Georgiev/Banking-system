@@ -10,9 +10,9 @@ public class Transaction {
 
     private int id;
 
-    private final BankAccount sourceAccount;
+    private final String sourceAccountIban;
 
-    private final BankAccount targetAccount;
+    private final String targetAccountIban;
 
     private final BankInstitution sourceBank;
 
@@ -30,8 +30,8 @@ public class Transaction {
 
     private Transaction(TransactionBuilder transactionBuilder) {
         this.id = transactionBuilder.id;
-        this.sourceAccount = transactionBuilder.sourceAccount;
-        this.targetAccount = transactionBuilder.targetAccount;
+        this.sourceAccountIban = transactionBuilder.sourceAccountIban;
+        this.targetAccountIban = transactionBuilder.targetAccountIban;
         this.sourceBank = transactionBuilder.sourceBank;
         this.targetBank = transactionBuilder.targetBank;
         this.amount = transactionBuilder.amount;
@@ -40,12 +40,12 @@ public class Transaction {
         this.timestamp = transactionBuilder.timestamp;
     }
 
-    public BankAccount getSourceAccount() {
-        return sourceAccount;
+    public String getSourceAccountIban() {
+        return sourceAccountIban;
     }
 
-    public BankAccount getTargetAccount() {
-        return targetAccount;
+    public String getTargetAccountIban() {
+        return targetAccountIban;
     }
 
     public BankInstitution getSourceBank() {
@@ -93,7 +93,7 @@ public class Transaction {
                      Source currency: %s
                      Transaction type: %s
                      Timestamp: %s %n""",
-                sourceAccount.getIban().get(),
+                sourceAccountIban,
                 getTargetBank().getName(),
                 getSourceCurrency(),
                 getAmount(),
@@ -110,9 +110,9 @@ public class Transaction {
                      Target currency: %s
                      Transaction type: %s
                      Timestamp: %s %n""",
-                sourceAccount.getIban().get(),
+                sourceAccountIban,
                 getSourceBank().getName(),
-                targetAccount.getIban().get(),
+                targetAccountIban,
                 getTargetBank().getName(),
                 getSourceCurrency(),
                 getAmount(),
@@ -125,11 +125,11 @@ public class Transaction {
 
     public static class TransactionBuilder {
 
-        private final BankAccount sourceAccount;
-
         private int id;
 
-        private BankAccount targetAccount;
+        private final String sourceAccountIban;
+
+        private String targetAccountIban;
 
         private final BankInstitution sourceBank;
 
@@ -141,25 +141,23 @@ public class Transaction {
 
         private Currency targetCurrency;
 
-        private String transactionType;
-
         private final LocalDate timestamp;
 
-        public TransactionBuilder(BankAccount sourceAccount, BankInstitution sourceBank, double amount, Currency sourceCurrency, LocalDate timestamp) {
-            this.sourceAccount = sourceAccount;
+        public TransactionBuilder(String sourceAccountIban, BankInstitution sourceBank, double amount, Currency sourceCurrency, LocalDate timestamp) {
+            this.sourceAccountIban = sourceAccountIban;
             this.sourceBank = sourceBank;
             this.amount = amount;
             this.sourceCurrency = sourceCurrency;
             this.timestamp = timestamp;
         }
 
-        public TransactionBuilder setTargetAccount(BankAccount targetAccount) {
-            this.targetAccount = targetAccount;
+        public TransactionBuilder setId(int id) {
+            this.id = id;
             return this;
         }
 
-        public TransactionBuilder setId(int id) {
-            this.id = id;
+        public TransactionBuilder setTargetAccount(String targetAccountIban) {
+            this.targetAccountIban = targetAccountIban;
             return this;
         }
 

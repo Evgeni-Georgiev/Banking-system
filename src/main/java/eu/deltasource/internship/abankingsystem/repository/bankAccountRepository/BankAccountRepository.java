@@ -17,7 +17,7 @@ public interface BankAccountRepository {
      */
     BankAccount getByIban(final String iban);
 
-    List<Transaction> getTransferStatementByAccount(BankAccount bankAccount);
+    List<Transaction> getTransferStatementByAccount(String bankAccount);
 
     void addTransaction(Transaction transaction);
 

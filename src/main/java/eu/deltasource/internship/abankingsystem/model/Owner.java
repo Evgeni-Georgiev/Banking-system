@@ -15,13 +15,19 @@ public class Owner {
         this.name = name;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return String.format("%nOwner Details: %s", getName());
+        return String.format(
+            """
+                Owner Details: %s""", getName());
     }
 
 }

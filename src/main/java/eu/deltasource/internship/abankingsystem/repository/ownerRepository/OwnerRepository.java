@@ -3,6 +3,9 @@ package eu.deltasource.internship.abankingsystem.repository.ownerRepository;
 import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.Owner;
 
+import java.util.List;
+import java.util.Map;
+
 public interface OwnerRepository {
 
     /**
@@ -13,20 +16,16 @@ public interface OwnerRepository {
     void addOwnerToMap(final Owner owner);
 
     /**
-     * Assign Owner to Bank Account in Map
+     * Assign Owner to Bank Account(s)
      *
-     * @param owner
-     * @param bankAccount
+//     * @param owner
+//     * @param bankAccounts
      */
-    void addAccountToOwner(Owner owner, BankAccount bankAccount);
-
-    /**
-     * Find out the Owner of account
-     *
-     * @param bankAccount
-     * @return
-     */
-    Owner getOwner(BankAccount bankAccount);
+    void addOwnerToAccounts(Owner owner, List<BankAccount> bankAccounts);
 
     Owner getOwnerById(int id);
+
+    List<BankAccount> getAccountsForOwner(Owner owner);
+
+    Map<Owner, List<BankAccount>> getOwnerAccountMap();
 }

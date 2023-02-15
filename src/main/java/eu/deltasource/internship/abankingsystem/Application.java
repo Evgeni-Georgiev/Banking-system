@@ -157,15 +157,12 @@ public class Application {
 
         LocalDate start = LocalDate.of(2023, 2, 7);
         LocalDate end = LocalDate.of(2023, 2, 10);
-//        System.out.println(bankAccount1.getTransferStatementLocal(start, end));
         System.out.println("Date range:");
         System.out.println(bankAccountRepository.getTransferStatementLocal(start, end));
         System.out.println("=============");
 
-        System.out.println(bankAccountRepository.getTransferStatementByAccount(String.valueOf(Optional.of(bankAccount2.getIban()))));
-
         System.out.println("Simon's all transactions: ");
-        System.out.println(bankAccountRepository.getTransferStatementByAccount(String.valueOf(Optional.of(bankAccount2.getIban()))));
+        System.out.println(bankAccountRepository.getTransferStatementsByAccount(bankAccount3.getIban().orElse("")));
 
         System.out.println("Simon has accounts: ");
 

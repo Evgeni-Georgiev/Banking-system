@@ -5,6 +5,9 @@ import eu.deltasource.internship.abankingsystem.enums.Currency;
 
 import java.util.Optional;
 
+/**
+ * Create BankAccounts and adding specific properties to it depending on the required type of account.
+ */
 public class BankAccount {
 
     private final Optional<String> iban;
@@ -54,7 +57,8 @@ public class BankAccount {
     public String toString() {
         return String.format(
                 """
-                    %nBank Account Details:
+                    
+                    Bank Account Details:
                     IBAN: %s
                     Currency: %s
                     Amount Available: %.2f

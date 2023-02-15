@@ -6,6 +6,9 @@ import eu.deltasource.internship.abankingsystem.model.BankAccount;
 
 import java.util.Optional;
 
+/**
+ * Performing object creation depending on the object type.
+ */
 public class CurrentAccount extends BankAccount {
 
     public CurrentAccount(Optional<String> iban, Currency currency, double amountAvailable, AccountType accountType) {

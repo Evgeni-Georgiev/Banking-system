@@ -18,14 +18,14 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
     static BankAccountRepositoryImpl instance = null;
 
     @Override
-    public List<Transaction> getTransferStatementByAccount(String bankAccountIban) {
+    public List<Transaction> getTransferStatementsByAccount(String bankAccountIban) {
         return transferStatement.stream()
             .filter(currentTransactionStatement -> isTransactionStatementOnAccountIban(bankAccountIban, currentTransactionStatement))
             .toList();
     }
 
     /**
-     * Check if IBAN is present in the transaction(matters not target or source)
+     * Check if IBAN is present in the transaction(matters not target or source).
      *
      * @param bankAccountIban
      * @param currentTransactionStatement
@@ -34,7 +34,7 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
     private boolean isTransactionStatementOnAccountIban(String bankAccountIban, Transaction currentTransactionStatement) {
         return currentTransactionStatement.getSourceAccountIban().equals(bankAccountIban)
             || (currentTransactionStatement.getTargetAccountIban() != null
-            && currentTransactionStatement.getSourceAccountIban().equals(bankAccountIban));
+            && currentTransactionStatement.getTargetAccountIban().equals(bankAccountIban));
     }
 
     @Override

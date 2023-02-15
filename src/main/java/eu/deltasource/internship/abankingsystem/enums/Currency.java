@@ -1,5 +1,8 @@
 package eu.deltasource.internship.abankingsystem.enums;
 
+/**
+ * Store all currencies.
+ */
 public enum Currency {
 
     USD("USD"),

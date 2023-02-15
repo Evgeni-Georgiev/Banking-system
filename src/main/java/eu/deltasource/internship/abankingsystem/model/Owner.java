@@ -1,5 +1,8 @@
 package eu.deltasource.internship.abankingsystem.model;
 
+/**
+ * Client/Customer having at least one BankAccount in at least one BankInstitution.
+ */
 public class Owner {
 
     private int id;
@@ -27,7 +30,9 @@ public class Owner {
     public String toString() {
         return String.format(
             """
-                Owner Details: %s""", getName());
+                
+                Owner Details: %s
+                """, getName());
     }
 
 }

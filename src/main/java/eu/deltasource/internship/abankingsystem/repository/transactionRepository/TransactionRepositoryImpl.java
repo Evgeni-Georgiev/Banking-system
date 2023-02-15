@@ -7,11 +7,20 @@ import java.util.Map;
 
 public class TransactionRepositoryImpl implements TransactionRepository{
 
-    private final Map<Integer, Transaction> transactionMap = new HashMap<>();
+    final Map<Integer, Transaction> transactionMap = new HashMap<>();
 
-    private static TransactionRepository instance = null;
+    private static TransactionRepositoryImpl instance = null;
 
     private int idCounter = 1;
+
+    private TransactionRepositoryImpl() {}
+
+    public static TransactionRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new TransactionRepositoryImpl();
+        }
+        return instance;
+    }
 
     @Override
     public Transaction getTransactionById(final int id) {
@@ -25,15 +34,6 @@ public class TransactionRepositoryImpl implements TransactionRepository{
             transactionMap.put(idCounter, transaction);
             idCounter++;
         }
-    }
-
-    private TransactionRepositoryImpl(){}
-
-    public static TransactionRepository getInstance() {
-        if (instance == null) {
-            instance = new TransactionRepositoryImpl();
-        }
-        return instance;
     }
 
 }

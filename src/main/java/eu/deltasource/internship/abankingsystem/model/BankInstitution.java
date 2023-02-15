@@ -1,5 +1,8 @@
 package eu.deltasource.internship.abankingsystem.model;
 
+/**
+ * Create BankInstitution and adding specific properties to it.
+ */
 public class BankInstitution {
 
     private final String name;
@@ -33,9 +36,11 @@ public class BankInstitution {
     public String toString() {
         return String.format(
                 """
+                    
                     Bank Details:
                     Name: %s
-                    Address: %s""",
+                    Address: %s
+                    """,
             getName(),
             getAddress()
         );

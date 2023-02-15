@@ -8,8 +8,10 @@ import eu.deltasource.internship.abankingsystem.repository.ownerRepository.Owner
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+/**
+ * Processing business logic for BankInstitution.
+ */
 public class BankInstitutionServiceImpl implements BankInstitutionService {
 
     private final BankInstitutionRepository bankInstitutionRepository;
@@ -32,14 +34,14 @@ public class BankInstitutionServiceImpl implements BankInstitutionService {
         return ownerRepository.getOwnerAccountMap().entrySet().stream()
             .filter(entry -> entry.getValue().stream().anyMatch(account -> bankInstitutionRepository.getBank(account).equals(bankInstitution)))
             .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
     public List<BankAccount> filterAccountsInBank(BankInstitution bankInstitution) {
         return bankInstitutionRepository.getAllAccounts().stream()
             .filter(account -> bankInstitutionRepository.getBank(account).equals(bankInstitution))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override

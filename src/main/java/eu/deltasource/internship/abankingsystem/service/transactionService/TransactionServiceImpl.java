@@ -15,7 +15,6 @@ import eu.deltasource.internship.abankingsystem.repository.transactionRepository
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Processing business logic for transactions.
@@ -84,12 +83,12 @@ public class TransactionServiceImpl implements TransactionService {
 
         var dayCount = bankInstitutionRepository.getBank(fromAccount).getDayCountTime();
         Transaction transaction = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(fromAccount.getIban())),
+            fromAccount.getIban().orElse(""),
             bankInstitutionRepository.getBank(fromAccount),
             amount,
             fromAccount.getCurrency(),
             processLocalDate(dayCount))
-            .setTargetAccount(String.valueOf(Optional.of(toAccount.getIban())))
+            .setTargetAccount(toAccount.getIban().orElse(""))
             .setTargetBank(bankInstitutionRepository.getBank(toAccount))
             .setTargetCurrency(toAccount.getCurrency())
             .build();
@@ -113,7 +112,7 @@ public class TransactionServiceImpl implements TransactionService {
         // Get the count of days from BankInstitution using map through the account that is assigned to that bank.
         var dayCount = bankInstitutionRepository.getBank(bankAccount).getDayCountTime();
         Transaction transaction = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(bankAccount.getIban())),
+            bankAccount.getIban().orElse(""),
             bankInstitutionRepository.getBank(bankAccount),
             depositAmount,
             bankAccount.getCurrency(),

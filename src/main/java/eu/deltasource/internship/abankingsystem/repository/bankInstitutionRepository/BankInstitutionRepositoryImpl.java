@@ -33,6 +33,8 @@ public class BankInstitutionRepositoryImpl implements BankInstitutionRepository 
 
     final List<Owner> allOwners = new ArrayList<>();
 
+    private int idCounter = 1;
+
     private static BankInstitutionRepositoryImpl instance = null;
 
     public static BankInstitutionRepositoryImpl getInstance() {
@@ -58,8 +60,6 @@ public class BankInstitutionRepositoryImpl implements BankInstitutionRepository 
         }
         bankExchangeRates.put(bank, bankRates);
     }
-
-    private int idCounter = 1;
 
     @Override
     public List<BankAccount> getAllAccounts() {
@@ -145,7 +145,7 @@ public class BankInstitutionRepositoryImpl implements BankInstitutionRepository 
             .filter(entry -> entry.getValue().contains(bankAccount))
             .map(Map.Entry::getKey)
             .findFirst();
-        return bankOptional.orElseThrow(() -> new BankInstitutionNotFoundException("BankInstitution not found!"));
+        return bankOptional.orElseThrow(() -> new BankInstitutionNotFoundException(bankOptional));
     }
 
     @Override

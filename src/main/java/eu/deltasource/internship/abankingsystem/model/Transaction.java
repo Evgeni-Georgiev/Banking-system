@@ -6,6 +6,9 @@ import eu.deltasource.internship.abankingsystem.enums.TransactionType;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Create certain type of transaction(transfer, deposit, withdraw).
+ */
 public class Transaction {
 
     private int id;
@@ -88,6 +91,7 @@ public class Transaction {
         if (Objects.equals(getTransactionType(), TransactionType.DEPOSIT) || Objects.equals(getTransactionType(), TransactionType.WITHDRAW)) {
             return String.format(
                 """
+                     
                      Source account: %s(%s)
                      Transferred amount: (%s)%,.2f
                      Source currency: %s
@@ -103,13 +107,15 @@ public class Transaction {
         } else {
             return String.format(
                 """
+                     
                      Source account: %s(%s)
                      Target account: %s(%s)
                      Transferred amount: (%s)%,.2f
                      Source currency: %s
                      Target currency: %s
                      Transaction type: %s
-                     Timestamp: %s %n""",
+                     Timestamp: %s
+                     """,
                 sourceAccountIban,
                 getSourceBank().getName(),
                 targetAccountIban,

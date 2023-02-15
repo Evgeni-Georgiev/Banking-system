@@ -32,18 +32,29 @@ class OwnerServiceImplTest {
 
     @Test
     void Should_createOwner_When_ValidData() {
+        // Given
         String name = "Simon";
         Owner owner = new Owner(name);
+
+        // When
         classUnderTest.createOwner(owner.getName());
+
+        // Then
         Assertions.assertEquals("Simon", name);
     }
 
-//    @Test
-//    void getOwnerById() {
-//        String name = "Simon";
-//        Owner owner = new Owner(name);
-//        classUnderTest.createOwner(owner.getName());
-//        Assertions.assertEquals(owner, classUnderTest.getOwnerById(1));
-//    }
+    @Test
+    void getOwnerById() {
+        // Given
+        String name = "Simon";
+        Owner owner = new Owner(name);
+        classUnderTest.createOwner(owner.getName());
+
+        // When
+        classUnderTest.getOwnerById(0);
+
+        // Then
+        Assertions.assertEquals(owner.getName(),"Simon");
+    }
 
 }

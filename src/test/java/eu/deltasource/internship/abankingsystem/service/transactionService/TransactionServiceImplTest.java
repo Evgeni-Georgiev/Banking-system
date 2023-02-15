@@ -89,7 +89,7 @@ class TransactionServiceImplTest {
         BankAccount to = new CurrentAccount(Optional.of("iban"), Currency.EUR, 12, AccountType.SAVINGS_ACCOUNT);
 
         // Then
-        Assertions.assertThrows(TransferBetweenNotCurrentAccountsException.class, ()-> classUnderTest.transfer(from, to, 2));
+        Assertions.assertThrows(TransferBetweenNotCurrentAccountsException.class, () -> classUnderTest.transfer(from, to, 2));
     }
 
     @Test
@@ -97,7 +97,6 @@ class TransactionServiceImplTest {
         // Given
         BankAccount account = new CurrentAccount(Optional.of("iban2"), Currency.EUR, 15, AccountType.CURRENT_ACCOUNT);
         BankInstitution bankInstitution = new BankInstitution("DSK", "asd");
-
         when(bankInstitutionRepository.getBank(account)).thenReturn(bankInstitution);
         when(bankInstitutionRepository.getTaxMap(bankInstitution)).thenReturn(getTaxMap());
         when(bankInstitutionRepository.getExchangeRates(bankInstitution)).thenReturn(getExchangeRate());
@@ -114,7 +113,6 @@ class TransactionServiceImplTest {
         // Given
         BankAccount account = new CurrentAccount(Optional.of("iban2"), Currency.EUR, 15, AccountType.CURRENT_ACCOUNT);
         BankInstitution bankInstitution = new BankInstitution("DSK", "asd");
-
         when(bankInstitutionRepository.getBank(account)).thenReturn(bankInstitution);
         when(bankInstitutionRepository.getTaxMap(bankInstitution)).thenReturn(getTaxMap());
         when(bankInstitutionRepository.getExchangeRates(bankInstitution)).thenReturn(getExchangeRate());
@@ -131,7 +129,6 @@ class TransactionServiceImplTest {
         // Given
         BankAccount account = new CurrentAccount(Optional.of("iban2"), Currency.EUR, 15, AccountType.CURRENT_ACCOUNT);
         BankInstitution bankInstitution = new BankInstitution("DSK", "asd");
-
         when(bankInstitutionRepository.getBank(account)).thenReturn(bankInstitution);
         when(bankInstitutionRepository.getTaxMap(bankInstitution)).thenReturn(getTaxMap());
         when(bankInstitutionRepository.getExchangeRates(bankInstitution)).thenReturn(getExchangeRate());
@@ -151,7 +148,6 @@ class TransactionServiceImplTest {
         BankAccount to = new CurrentAccount(Optional.of("iban2"), Currency.EUR, 12, AccountType.CURRENT_ACCOUNT);
         BankInstitution bankInstitution1 = new BankInstitution("DSK", "asd");
         BankInstitution bankInstitution2 = new BankInstitution("KBC", "qwe");
-
         when(bankInstitutionRepository.getBank(from)).thenReturn(bankInstitution1);
         when(bankInstitutionRepository.getBank(to)).thenReturn(bankInstitution2);
         when(bankInstitutionRepository.getTaxMap(any(BankInstitution.class))).thenReturn(getTaxMap());

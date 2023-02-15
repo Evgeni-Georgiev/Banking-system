@@ -2,6 +2,7 @@ package eu.deltasource.internship.abankingsystem.service.bankAccountService;
 
 import eu.deltasource.internship.abankingsystem.enums.AccountType;
 import eu.deltasource.internship.abankingsystem.enums.Currency;
+import eu.deltasource.internship.abankingsystem.model.BankAccount;
 import eu.deltasource.internship.abankingsystem.model.Owner;
 import eu.deltasource.internship.abankingsystem.repository.bankAccountRepository.BankAccountRepository;
 import eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepository.BankInstitutionRepository;
@@ -37,16 +38,38 @@ class BankAccountServiceImplTest {
 
     @Test
     void Should_createCurrentAccount_When_ValidData() {
+        // Given
         Owner from = new Owner("John");
-        classUnderTest.createBankAccount(Optional.of("iban2"), Currency.EUR, 15, AccountType.CURRENT_ACCOUNT);
+
+        // When
+        classUnderTest.createBankAccount(Optional.of("iban1"), Currency.EUR, 15, AccountType.CURRENT_ACCOUNT);
+
+        // Then
         Assertions.assertEquals("John", from.getName());
     }
 
     @Test
     void Should_createSavingsAccount_When_ValidData() {
+        // Given
         Owner from = new Owner("John");
-        classUnderTest.createBankAccount(Optional.of("iban2"), Currency.EUR, 15, AccountType.CURRENT_ACCOUNT);
+
+        // When
+        classUnderTest.createBankAccount(Optional.of("iban2"), Currency.EUR, 15, AccountType.SAVINGS_ACCOUNT);
+
+        // Then
         Assertions.assertEquals("John", from.getName());
+    }
+
+    @Test
+    void Should_GetBankAccountByIban_When_ValidData() {
+        // Given
+        classUnderTest.createBankAccount(Optional.of("iban2"), Currency.EUR, 15, AccountType.SAVINGS_ACCOUNT);
+
+        // When
+        BankAccount bankAccount1 = classUnderTest.getBankAccountByIban("iban2");
+
+        // Then
+        Assertions.assertEquals(bankAccount1, classUnderTest.getBankAccountByIban("iban2"));
     }
 
 }

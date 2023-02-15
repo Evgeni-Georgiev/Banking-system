@@ -1,6 +1,8 @@
 package eu.deltasource.internship.abankingsystem.service.bankInstitutionService;
 
-import eu.deltasource.internship.abankingsystem.enums.ExchangeRate;
+import eu.deltasource.internship.abankingsystem.model.BankAccount;
+import eu.deltasource.internship.abankingsystem.model.BankInstitution;
+import eu.deltasource.internship.abankingsystem.model.Owner;
 import eu.deltasource.internship.abankingsystem.repository.bankAccountRepository.BankAccountRepository;
 import eu.deltasource.internship.abankingsystem.repository.bankInstitutionRepository.BankInstitutionRepository;
 import eu.deltasource.internship.abankingsystem.repository.ownerRepository.OwnerRepository;
@@ -12,8 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BankInstitutionServiceImplTest {
@@ -33,25 +38,40 @@ class BankInstitutionServiceImplTest {
     @InjectMocks
     BankInstitutionServiceImpl classUnderTest;
 
-    Map<ExchangeRate, Double> getExchangeRate() {
-        Map<ExchangeRate, Double> exchangeRates = new HashMap<>();
-        exchangeRates.put(ExchangeRate.BGNEUR, 1.95);
-        exchangeRates.put(ExchangeRate.BGNUSD, 1.79);
-        exchangeRates.put(ExchangeRate.USDBGN, 0.55);
-        exchangeRates.put(ExchangeRate.USDEUR, 1.08);
-        exchangeRates.put(ExchangeRate.EURBGN, 0.51);
-        exchangeRates.put(ExchangeRate.EURUSD, 0.92);
-        exchangeRates.put(ExchangeRate.EUREUR, 1.0);
-        exchangeRates.put(ExchangeRate.BGNBGN, 1.0);
-        exchangeRates.put(ExchangeRate.USDUSD, 1.0);
-        return exchangeRates;
+    @Test
+    public void Should_FilterOwnersByBank_With_EmptyOwnerAccountMap() {
+        // Given
+        when(ownerRepository.getOwnerAccountMap()).thenReturn(new HashMap<>());
+
+        // When
+        List<Owner> filteredOwners = classUnderTest.filterOwnersByBank(new BankInstitution("Test Bank 1", "asdsd"));
+
+        // Then
+        Assertions.assertEquals(0, filteredOwners.size());
     }
 
     @Test
     void Should_createBank_When_ValidData() {
+        // Given
         String name = "DSK";
+
+        // When
         classUnderTest.createBankInstitution(name, "addressNumber");
+
+        // Then
         Assertions.assertEquals("DSK", name);
+    }
+
+    @Test
+    public void Should_FilterAccountsInBank_With_EmptyAccounts() {
+        // Given
+        when(bankInstitutionRepository.getAllAccounts()).thenReturn(Arrays.asList());
+
+        // When
+        List<BankAccount> filteredAccounts = classUnderTest.filterAccountsInBank(new BankInstitution("Test Bank 1", "asdsd"));
+
+        // Then
+        Assertions.assertEquals(0, filteredAccounts.size());
     }
 
 }

@@ -12,9 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 class BankAccountRepositoryImplTest {
@@ -29,49 +27,115 @@ class BankAccountRepositoryImplTest {
         // create in each test case with @Test and then run the test
     void clearData() {
         classUnderTest.bankAccountMap.clear();
-//        BankAccountRepositoryImpl.accounts.clear();
         classUnderTest.transferStatement.clear();
     }
 
     @Test
     void Should_AddAccountToMap_When_ValidAccount() {
+        // Given
         String iban = "iban".toUpperCase();
         BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+
+        // When
         classUnderTest.addBankAccountToMap(bankAccount);
+
+        // Then
         Assertions.assertEquals(bankAccount, classUnderTest.bankAccountMap.get(iban));
     }
 
+    @Test
+    public void Should_GetTransferStatementBySourceAccount_When_ValidData() {
+        // Given
+        BankAccount sourceAccount = new CurrentAccount(Optional.of("iban"), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+        BankAccount targetAccount = new CurrentAccount(Optional.of("iban2"), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
+        Transaction transaction = new Transaction.TransactionBuilder(
+            sourceAccount.getIban().orElse(""),
+            bankInstitution,
+            20.0,
+            Currency.EUR,
+            LocalDate.of(2023, 2, 5))
+            .setTargetAccount(targetAccount.getIban().orElse(""))
+            .setTargetBank(bankInstitution)
+            .setTargetCurrency(Currency.EUR)
+            .build();
+
+        // When
+        classUnderTest.transferStatement.add(transaction);
+
+        // Then
+        Assertions.assertEquals(1, classUnderTest.getTransferStatementsByAccount(sourceAccount.getIban().orElse("")).size());
+        Assertions.assertEquals(1, classUnderTest.getTransferStatementsByAccount(targetAccount.getIban().orElse("")).size());
+    }
+
+    @Test
+    public void Should_GetTransferStatementByTargetAccount_When_ValidData() {
+        // Given
+        String iban = "iban".toUpperCase();
+        BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
+        BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
+        Transaction transaction1 = new Transaction.TransactionBuilder(
+            bankAccount.getIban().orElse(""),
+            bankInstitution,
+            20.0,
+            Currency.EUR,
+            LocalDate.of(2023, 2, 5)
+        ).build();
+        Transaction transaction2 = new Transaction.TransactionBuilder(
+            bankAccount.getIban().orElse(""),
+            bankInstitution,
+            20.0,
+            Currency.EUR,
+            LocalDate.of(2023, 2, 5)
+        ).build();
+        Transaction transaction3 = new Transaction.TransactionBuilder(
+            bankAccount.getIban().orElse(""),
+            bankInstitution,
+            20.0,
+            Currency.EUR,
+            LocalDate.of(2023, 2, 5)
+        ).build();
+
+        // When
+        classUnderTest.transferStatement.add(transaction1);
+        classUnderTest.transferStatement.add(transaction2);
+        classUnderTest.transferStatement.add(transaction3);
+
+        // Then
+        Assertions.assertEquals(3, classUnderTest.getTransferStatementsByAccount(bankAccount.getIban().orElse("")).size());
+    }
 
     @Test
     void Should_AddTransaction_When_ValidData_Deposit_Withdraw() {
+        // Given
         String iban = "iban".toUpperCase();
         BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
         BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
         Transaction transaction = new Transaction.TransactionBuilder(
-                String.valueOf(Optional.of(bankAccount.getIban())),
+                bankAccount.getIban().orElse(""),
                 bankInstitution,
                 20.0,
                 Currency.EUR,
                 LocalDate.of(2023, 2, 5)
         ).build();
+
+        // When
         classUnderTest.addTransaction(transaction);
 
+        // Then
         Assertions.assertAll(() -> Assertions.assertTrue(classUnderTest.transferStatement.contains(transaction)),
                 () -> Assertions.assertEquals(transaction, classUnderTest.transferStatement.get(0)));
     }
 
     @Test
     void Should_GetIban_When_Requested() {
-
         // Given
         String iban = "iban".toUpperCase();
         BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
-        Map<String, BankAccount> bankAccountMap = new HashMap<>();
-        bankAccountMap.put(iban, bankAccount);
+        classUnderTest.bankAccountMap.put(iban, bankAccount);
 
         // When
-        classUnderTest.addBankAccountToMap(bankAccount);
-//        classUnderTest.getByIban(iban); // set through variable
+        classUnderTest.getByIban(iban);
 
         // Then
         Assertions.assertEquals(bankAccount, classUnderTest.getByIban(iban));
@@ -86,21 +150,21 @@ class BankAccountRepositoryImplTest {
         BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
         BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
         Transaction transaction1 = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(bankAccount.getIban())),
+            bankAccount.getIban().orElse(""),
             bankInstitution,
             10.0,
             Currency.EUR,
             LocalDate.of(2023, 2, 5)
         ).build();
         Transaction transaction2 = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(bankAccount.getIban())),
+            bankAccount.getIban().orElse(""),
             bankInstitution,
             20.0,
             Currency.EUR,
             LocalDate.of(2023, 2, 6)
         ).build();
         Transaction transaction3 = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(bankAccount.getIban())),
+            bankAccount.getIban().orElse(""),
             bankInstitution,
             30.0,
             Currency.EUR,
@@ -131,21 +195,21 @@ class BankAccountRepositoryImplTest {
         BankAccount bankAccount = new CurrentAccount(Optional.of(iban), Currency.EUR, 200.0, AccountType.CURRENT_ACCOUNT);
         BankInstitution bankInstitution = new BankInstitution("DSK", "asdasdwqe");
         Transaction transaction1 = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(bankAccount.getIban())),
+            bankAccount.getIban().orElse(""),
             bankInstitution,
             10.0,
             Currency.EUR,
             LocalDate.of(2023, 2, 5)
         ).build();
         Transaction transaction2 = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(bankAccount.getIban())),
+            bankAccount.getIban().orElse(""),
             bankInstitution,
             20.0,
             Currency.EUR,
             LocalDate.of(2023, 2, 6)
         ).build();
         Transaction transaction3 = new Transaction.TransactionBuilder(
-            String.valueOf(Optional.of(bankAccount.getIban())),
+            bankAccount.getIban().orElse(""),
             bankInstitution,
             30.0,
             Currency.EUR,
@@ -159,34 +223,7 @@ class BankAccountRepositoryImplTest {
         List<Transaction> result = classUnderTest.getTransferStatementLocal(start, end);
 
         // Then
-        // Assert by size of the List and amount for transaction
         Assertions.assertEquals(0, result.size());
     }
-
-//    @Test
-//    void Should_CountAccountsOwnerHas_When_ValidData() {
-//        // Given
-//        Owner owner = new Owner("Simon");
-//        String iban1 = "iban1".toUpperCase();
-//        String iban2 = "iban2".toUpperCase();
-//        String iban3 = "iban3".toUpperCase();
-//        BankAccount account1 = new CurrentAccount(iban1, Currency.EUR, 200.0, 'C');
-//        BankAccount account2 = new CurrentAccount(iban2, Currency.EUR, 200.0, 'C');
-//        BankAccount account3 = new CurrentAccount(iban3, Currency.EUR, 200.0, 'C');
-//
-////        ownerRepository.addOwnerToAccounts(vix, List.of(bankAccount1, bankAccount2));
-//
-//        // When
-//        BankAccountRepositoryImpl.accounts.add(account1);
-//        BankAccountRepositoryImpl.accounts.add(account2);
-//        BankAccountRepositoryImpl.accounts.add(account3);
-//        classUnderTest.addBankAccountToMap(account1);
-//        classUnderTest.addBankAccountToMap(account2);
-//        classUnderTest.addBankAccountToMap(account3);
-//
-//        // Then
-//        int countOfAccountsSingleOwnerHas = ownerRepository.getAccountsForOwner(simon).size();
-//        Assertions.assertEquals(6, countOfAccountsSingleOwnerHas);
-//    }
 
 }

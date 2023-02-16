@@ -102,7 +102,7 @@ public class BankInstitutionRepositoryImpl implements BankInstitutionRepository 
     }
 
 	@Override
-	public void filterAndAddTaxesToBank(BankInstitution bank, Map<TaxType, Double> taxes, List<TaxType> taxTypeToAdd) {
+	public void addTaxesToBank(BankInstitution bank, Map<TaxType, Double> taxes, List<TaxType> taxTypeToAdd) {
 		Map<TaxType, Double> filteredTaxes = taxes.entrySet().stream()
 			.filter(entry -> taxTypeToAdd.contains(entry.getKey()))
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

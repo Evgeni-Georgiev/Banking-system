@@ -43,6 +43,12 @@ public interface BankInstitutionRepository {
      */
     BankInstitution getBank(BankAccount bankAccount);
 
+    /**
+     * Add taxes to bank(used on operations).
+     *
+     * @param bank requested bank.
+     * @param taxMap requested taxes.
+     */
 	void addTaxToBankMap(BankInstitution bank, Map<TaxType, Double> taxMap);
 
     /**
@@ -78,7 +84,10 @@ public interface BankInstitutionRepository {
      */
 	Map<TaxType, Double> findTaxesByBank(BankInstitution bank);
 
-	void filterAndAddTaxesToBank(BankInstitution bank, Map<TaxType, Double> taxes, List<TaxType> taxTypeToAdd);
+    /**
+     * Add taxes to bank(used on operations).
+     */
+	void addTaxesToBank(BankInstitution bank, Map<TaxType, Double> taxes, List<TaxType> taxTypeToAdd);
 
     /**
      * Save transaction.

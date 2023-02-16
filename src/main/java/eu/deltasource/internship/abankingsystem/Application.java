@@ -93,13 +93,13 @@ public class Application {
 		taxMap2.put(TaxType.TAX_TO_DIFFERENT_BANK, 1.05);
 		bankInstitutionRepository.addTaxToBankMap(raiffeisen, taxMap2);
 
-		List<TaxType> taxTypeToAdd1 = List.of(TaxType.TAX_TO_THE_SAME_BANK, TaxType.TAX_TO_DIFFERENT_BANK);
-		List<TaxType> taxTypeToAdd2 = List.of(TaxType.TAX_TO_THE_SAME_BANK, TaxType.TAX_TO_DIFFERENT_BANK);
+//		List<TaxType> taxTypeToAdd1 = List.of(TaxType.TAX_TO_THE_SAME_BANK, TaxType.TAX_TO_DIFFERENT_BANK);
+//		List<TaxType> taxTypeToAdd2 = List.of(TaxType.TAX_TO_THE_SAME_BANK, TaxType.TAX_TO_DIFFERENT_BANK);
 
-		bankInstitutionRepository.filterAndAddTaxesToBank(dsk, taxMap1, taxTypeToAdd1);
-		bankInstitutionRepository.filterAndAddTaxesToBank(raiffeisen, taxMap2, taxTypeToAdd2);
-
-        // Add exchange rates to bank
+//		bankInstitutionRepository.filterAndAddTaxesToBank(dsk, taxMap1, taxTypeToAdd1);
+//		bankInstitutionRepository.filterAndAddTaxesToBank(raiffeisen, taxMap2, taxTypeToAdd2);
+//
+//         Add exchange rates to bank
         bankInstitutionRepository.addExchangeRatesToBank(dsk, exchangeRates1);
         bankInstitutionRepository.addExchangeRatesToBank(raiffeisen, exchangeRates1);
 

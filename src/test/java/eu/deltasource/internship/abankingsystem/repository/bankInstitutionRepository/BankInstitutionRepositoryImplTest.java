@@ -218,7 +218,7 @@ class BankInstitutionRepositoryImplTest {
         taxTypeToAdd.add(TaxType.TAX_TO_THE_SAME_BANK);
 
         // When
-        classUnderTest.filterAndAddTaxesToBank(bank, taxes, taxTypeToAdd);
+        classUnderTest.addTaxesToBank(bank, taxes, taxTypeToAdd);
 
         // Then
         Assertions.assertEquals(1, classUnderTest.bankTaxMap.size());

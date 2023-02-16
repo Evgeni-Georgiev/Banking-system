@@ -9,19 +9,19 @@ import java.util.Optional;
 public interface BankAccountService {
 
     /**
-     * Create account from model instance
+     * Create account from model instance.
      *
-     * @param iban
-     * @param currency
-     * @param amountAvailable
+     * @param iban account's IBAN
+     * @param currency default currency of the account
+     * @param amountAvailable base amount for the account to be created with.
      */
     void createBankAccount(Optional<String> iban, Currency currency, double amountAvailable, AccountType accountKey);
 
     /**
-     * Get existing Bank Account by it's Iban
+     * Get existing Bank Account by it's IBAN.
      *
-     * @param iban
-     * @return
+     * @param iban find existing account by this IBAN
+     * @return found BankAccount
      */
     BankAccount getBankAccountByIban(String iban);
 }
